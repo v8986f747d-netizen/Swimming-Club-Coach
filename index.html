@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B3A4A">
+<title>プールサイドの監督</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20512%20512%22%3E%3Crect%20width%3D%22512%22%20height%3D%22512%22%20rx%3D%2296%22%20fill%3D%22%230B3A4A%22/%3E%3Crect%20x%3D%220%22%20y%3D%22150%22%20width%3D%22512%22%20height%3D%2218%22%20fill%3D%22%23D64545%22/%3E%3Crect%20x%3D%220%22%20y%3D%22250%22%20width%3D%22512%22%20height%3D%2218%22%20fill%3D%22%23F4B400%22/%3E%3Crect%20x%3D%220%22%20y%3D%22350%22%20width%3D%22512%22%20height%3D%2218%22%20fill%3D%22%232F7FB8%22/%3E%3Ccircle%20cx%3D%22330%22%20cy%3D%22205%22%20r%3D%2234%22%20fill%3D%22%23F4B400%22/%3E%3Cpath%20d%3D%22M96%20312c40-30%2080-30%20120%200s80%2030%20120%200%2080-30%20120%200%22%20stroke%3D%22%23fff%22%20stroke-width%3D%2218%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E" type="image/svg+xml">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="水泳部監督">
+<style>
+:root{--deep:#0B3A4A;--deep2:#0F4C60;--water:#E8F3F2;--surface:#FFFFFF;--ink:#14262C;--ink2:#4B6168;--line:#C5DCDC;--yellow:#F4B400;--red:#C8443E;--blue:#2F7FB8;--green:#2E8B6A;--board:#071E26;--boardtxt:#FFD24A;
+ --r-G:#9AA5A8;--r-F:#86A39C;--r-E:#5FA58D;--r-D:#3E9DB3;--r-C:#3479C0;--r-B:#5865D4;--r-A:#8F52D0;--r-S:#D0563A;--r-SS:#E08A12;--r-SSS:#B8921C;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--water:#0C1E24;--surface:#12303A;--ink:#E3F0F0;--ink2:#9DB7BC;--line:#24505C;--deep:#06232D;--deep2:#0A3442;--board:#031319;color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--water);color:var(--ink);font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic UI","Meiryo",sans-serif;font-size:15px;line-height:1.6;-webkit-text-size-adjust:100%}
+:root{padding-top:env(safe-area-inset-top,0px)}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
+#app{max-width:560px;margin:0 auto;padding:0 14px calc(150px + env(safe-area-inset-bottom,0px))}
+.num{font-variant-numeric:tabular-nums}
+h1{font-size:28px;line-height:1.25;margin:0 0 8px;letter-spacing:.02em}
+h2{font-size:18px;margin:22px 0 8px}
+h3{font-size:15px;margin:14px 0 6px}
+p{margin:6px 0}
+.mut{color:var(--ink2);font-size:13px}
+.board{background:var(--board);color:#fff;border-radius:0 0 14px 14px;margin:0 -14px 12px;padding:12px 18px 14px;position:sticky;top:0;z-index:5}
+.board .date{font-size:24px;font-weight:800;color:var(--boardtxt);letter-spacing:.04em;font-variant-numeric:tabular-nums}
+.board .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:13px;color:#cfe3e6;margin-top:2px}
+.kind{display:inline-block;padding:1px 9px;border-radius:99px;font-size:12px;font-weight:700;color:#08222b;background:#9fd6d9}
+.kind.k-大会{background:var(--yellow)}.kind.k-試験期間{background:#f3a59f}.kind.k-オフ日{background:#c9d4d6}.kind.k-夏休み,.kind.k-冬休み,.kind.k-春休み{background:#a7e0b8}.kind.k-土曜,.kind.k-祝日{background:#bcd6ff}.kind.k-冬合宿{background:#ffd0a0}
+.rk{display:inline-flex;min-width:30px;justify-content:center;padding:0 6px;border-radius:6px;font-weight:800;color:#fff;font-size:13px;line-height:22px}
+.rk.G{background:var(--r-G)}.rk.F{background:var(--r-F)}.rk.E{background:var(--r-E)}.rk.D{background:var(--r-D)}.rk.C{background:var(--r-C)}.rk.B{background:var(--r-B)}.rk.A{background:var(--r-A)}.rk.S{background:var(--r-S)}.rk.SS{background:var(--r-SS)}.rk.SSS{background:linear-gradient(135deg,#B8921C,#F2D266,#B8921C)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:10px 0}
+.panel.hot{border:2px solid var(--yellow)}
+.menus{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mbtn{text-align:left;background:var(--surface);border:2px solid var(--line);border-radius:12px;padding:10px 12px;min-height:72px}
+.mbtn b{display:block;font-size:15px}
+.mbtn small{display:block;color:var(--ink2);font-size:12px;line-height:1.4}
+.mbtn.on{border-color:var(--deep2);background:linear-gradient(0deg,rgba(47,127,184,.10),rgba(47,127,184,.10)),var(--surface);box-shadow:inset 0 0 0 1px var(--deep2)}
+.mbtn:disabled{opacity:.45;cursor:not-allowed}
+.mbtn .tag{display:block;font-size:11px;color:var(--ink2);line-height:1.3}
+.cta{position:fixed;left:0;right:0;bottom:calc(58px + env(safe-area-inset-bottom,0px));z-index:9;display:flex;justify-content:center;padding:0 14px;pointer-events:none}
+.cta button{pointer-events:auto;width:100%;max-width:532px;background:var(--yellow);color:#20180a;border:none;border-radius:14px;padding:14px;font-size:17px;font-weight:800;box-shadow:0 3px 0 #b88400}
+.cta button:active{transform:translateY(2px);box-shadow:0 1px 0 #b88400}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--deep);display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom,0px);z-index:10}
+nav.tabs div{display:flex;width:100%;max-width:560px}
+nav.tabs button{flex:1;background:none;border:none;color:#9fc3c9;padding:8px 0 10px;font-size:12px;font-weight:700}
+nav.tabs button.on{color:#fff;box-shadow:inset 0 3px 0 var(--yellow)}
+nav.tabs button span{display:block;font-size:18px;line-height:22px}
+.list{margin:0;padding:0;list-style:none}
+.list li{padding:8px 0;border-bottom:1px solid var(--line)}
+.list li:last-child{border-bottom:none}
+.prow{display:flex;align-items:center;gap:8px;width:100%;background:none;border:none;text-align:left;padding:0}
+.prow .nm{font-weight:700}
+.prow .meta{color:var(--ink2);font-size:12px}
+.grow{flex:1;min-width:0}
+.pill{display:inline-block;font-size:11px;padding:0 7px;border-radius:99px;border:1px solid var(--line);color:var(--ink2);margin-right:3px}
+.pill.warn{border-color:var(--red);color:var(--red)}
+.up{color:var(--green)}.down{color:var(--red)}
+.notes li{font-size:14px}
+.notes li.up::before{content:'▲ ';color:var(--green)}.notes li.down::before{content:'▼ ';color:var(--red)}.notes li.rank::before{content:'★ ';color:var(--yellow)}.notes li.kika{font-weight:800}.notes li.kika::before{content:'✦ ';color:var(--r-SS)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px}
+.stats div{display:flex;justify-content:space-between;align-items:center;border-bottom:1px dashed var(--line);padding:3px 0}
+.arw{font-size:12px;width:22px;text-align:right}
+.btn{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-weight:700}
+.btn.pri{background:var(--deep2);color:#fff;border-color:var(--deep2)}
+.btn.warn{border-color:var(--red);color:var(--red)}
+.btn.sm{padding:4px 10px;font-size:13px}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.sheet{position:fixed;inset:0;background:rgba(3,19,25,.55);z-index:30;display:flex;align-items:flex-end;justify-content:center}
+.sheet>div{background:var(--water);width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:16px 16px 0 0;padding:16px 16px calc(24px + env(safe-area-inset-bottom,0px))}
+.full{position:fixed;inset:0;background:var(--water);z-index:20;overflow:auto}
+.full>div{max-width:560px;margin:0 auto;padding:0 14px 120px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:5px 4px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--ink2);font-weight:700;white-space:nowrap}
+.scroll{overflow-x:auto}
+.choice{display:block;width:100%;text-align:left;background:var(--surface);border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin:8px 0}
+.choice b{display:block}
+.choice:hover{border-color:var(--deep2)}
+.pool{background:#0e6f8a;border-radius:10px;overflow:hidden;position:relative}
+canvas{display:block;width:100%}
+.lb td{padding:3px 4px}
+.lb tr.own{background:rgba(244,180,0,.18);font-weight:700}
+.prog li{display:flex;gap:8px;align-items:center;font-size:13px;padding:5px 0}
+.prog li.done{color:var(--ink2)}
+.prog li.cur{font-weight:800}
+.prog li.maybe::after{content:'予選次第';font-size:10px;border:1px solid var(--line);color:var(--ink2);border-radius:99px;padding:0 6px;margin-left:auto}
+.prog li.mine::after{content:'自校';font-size:10px;background:var(--yellow);color:#20180a;border-radius:99px;padding:0 6px;margin-left:auto}
+.slot{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--line)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:none;background:var(--surface);padding:4px 7px;font-size:12px}
+.slot select{min-width:0}
+.seg button.on{background:var(--deep2);color:#fff}
+.title{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:30px 4px}
+.title h1{font-size:40px;line-height:1.15;color:var(--deep2)}
+@media (prefers-color-scheme:dark){.title h1{color:#9fd6d9}}
+.lanes{height:10px;background:repeating-linear-gradient(90deg,#D64545 0 14px,#fff 14px 28px,#2F7FB8 28px 42px,#fff 42px 56px);border-radius:3px;margin:14px 0}
+.cards{display:grid;gap:8px}
+.card{text-align:left;background:var(--surface);border:2px solid var(--line);border-radius:12px;padding:10px 12px}
+.card.on{border-color:var(--deep2)}
+select,input[type=text]{font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);max-width:100%}
+.toast{position:fixed;left:50%;top:16px;transform:translateX(-50%);background:var(--ink);color:var(--water);padding:8px 14px;border-radius:10px;z-index:50;font-size:14px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+.mini{display:grid;grid-template-columns:repeat(5,1fr);gap:3px 6px;margin-top:6px}
+.mini>span{display:flex;align-items:center;justify-content:space-between;gap:2px;font-size:11px;color:var(--ink2)}
+.rk.s{min-width:26px;font-size:11px;line-height:17px;padding:0 3px;border-radius:5px}
+
+.poolw{display:inline-block;margin:0 0 4px;padding:3px 10px;border-radius:8px;font-size:13px;font-weight:700;background:rgba(47,127,184,.12);color:var(--blue)}
+.poolw.free{background:rgba(46,139,106,.14);color:var(--green)}
+.poolw.none{background:rgba(200,68,62,.12);color:var(--red)}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<div id="cta" class="cta"></div>
+<nav id="nav" class="tabs" aria-label="メニュー"></nav>
+<div id="ov"></div>
+<script>
+/* ===== 固定データ ===== */
+const PREFS = [
+ ['北海道','北海道',35,'札幌,函館,旭川,釧路,帯広,北見,小樽,苫小牧,室蘭,江別,千歳,岩見沢,網走,稚内,名寄'],
+ ['青森県','東北',8,'青森,弘前,八戸,五所川原,十和田,三沢,むつ,黒石'],
+ ['岩手県','東北',8,'盛岡,花巻,北上,一関,奥州,釜石,宮古,久慈'],
+ ['宮城県','東北',16,'仙台,石巻,塩竈,気仙沼,名取,多賀城,大崎,白石,岩沼,登米'],
+ ['秋田県','東北',6,'秋田,能代,横手,大館,湯沢,大仙'],
+ ['山形県','東北',7,'山形,米沢,鶴岡,酒田,新庄,天童,寒河江'],
+ ['福島県','東北',12,'福島,会津若松,郡山,いわき,白河,須賀川,相馬,二本松'],
+ ['茨城県','関東',20,'水戸,日立,土浦,古河,つくば,取手,鹿嶋,竜ケ崎,石岡,下館'],
+ ['栃木県','関東',13,'宇都宮,足利,栃木,佐野,鹿沼,小山,真岡,大田原'],
+ ['群馬県','関東',13,'前橋,高崎,桐生,伊勢崎,太田,館林,渋川,藤岡'],
+ ['埼玉県','関東',51,'さいたま,川越,川口,所沢,越谷,熊谷,春日部,草加,上尾,浦和,大宮,秩父,入間,狭山,朝霞,久喜'],
+ ['千葉県','関東',44,'千葉,船橋,市川,松戸,柏,市原,佐倉,習志野,木更津,成田,銚子,八千代,流山,我孫子'],
+ ['東京都','関東',100,'世田谷,練馬,大田,足立,江戸川,杉並,板橋,八王子,町田,府中,調布,立川,三鷹,武蔵野,国立,日野,青梅,墨田,江東,品川,目黒,中野,豊島,荒川,葛飾,小金井'],
+ ['神奈川県','関東',65,'横浜,川崎,相模原,横須賀,藤沢,平塚,茅ヶ崎,厚木,大和,小田原,鎌倉,秦野,海老名,座間'],
+ ['山梨県','関東',5,'甲府,富士吉田,都留,韮崎'],
+ ['新潟県','北信越',15,'新潟,長岡,上越,三条,柏崎,新発田,燕'],
+ ['富山県','北信越',7,'富山,高岡,魚津,砺波,氷見'],
+ ['石川県','北信越',8,'金沢,小松,加賀,七尾,白山'],
+ ['福井県','北信越',5,'福井,敦賀,鯖江,武生'],
+ ['長野県','北信越',14,'長野,松本,上田,飯田,諏訪,伊那,佐久'],
+ ['岐阜県','東海',13,'岐阜,大垣,多治見,関,高山,各務原'],
+ ['静岡県','東海',24,'静岡,浜松,沼津,富士,清水,磐田,掛川,藤枝,三島'],
+ ['愛知県','東海',52,'名古屋,豊田,岡崎,一宮,豊橋,春日井,安城,豊川,刈谷,瀬戸,半田,小牧,津島,西尾'],
+ ['三重県','東海',12,'津,四日市,鈴鹿,松阪,桑名,伊勢,伊賀'],
+ ['滋賀県','近畿',10,'大津,彦根,草津,長浜,守山,近江八幡'],
+ ['京都府','近畿',18,'京都,宇治,舞鶴,福知山,亀岡,城陽,洛北'],
+ ['大阪府','近畿',62,'大阪,堺,豊中,吹田,高槻,枚方,東大阪,茨木,八尾,寝屋川,岸和田,和泉,守口,池田'],
+ ['兵庫県','近畿',37,'神戸,姫路,尼崎,明石,西宮,加古川,宝塚,伊丹,芦屋,三田,豊岡'],
+ ['奈良県','近畿',9,'奈良,橿原,生駒,大和郡山,天理'],
+ ['和歌山県','近畿',6,'和歌山,田辺,海南,橋本'],
+ ['鳥取県','中国',4,'鳥取,米子,倉吉'],
+ ['島根県','中国',4,'松江,出雲,浜田'],
+ ['岡山県','中国',13,'岡山,倉敷,津山,玉野,総社'],
+ ['広島県','中国',19,'広島,福山,呉,東広島,尾道,三原,廿日市'],
+ ['山口県','中国',9,'下関,山口,宇部,周南,岩国,防府'],
+ ['徳島県','四国',5,'徳島,鳴門,阿南'],
+ ['香川県','四国',6,'高松,丸亀,坂出,観音寺'],
+ ['愛媛県','四国',9,'松山,今治,新居浜,西条,宇和島'],
+ ['高知県','四国',5,'高知,南国,四万十,須崎'],
+ ['福岡県','九州',36,'福岡,北九州,久留米,飯塚,大牟田,春日,筑紫野,小倉,八幡,宗像,直方'],
+ ['佐賀県','九州',5,'佐賀,唐津,鳥栖,伊万里'],
+ ['長崎県','九州',9,'長崎,佐世保,諫早,大村,島原'],
+ ['熊本県','九州',12,'熊本,八代,天草,玉名,人吉,菊池,荒尾'],
+ ['大分県','九州',8,'大分,別府,中津,佐伯,日田'],
+ ['宮崎県','九州',7,'宮崎,都城,延岡,日向'],
+ ['鹿児島県','九州',11,'鹿児島,薩摩川内,鹿屋,霧島,出水,指宿'],
+ ['沖縄県','九州',10,'那覇,沖縄,うるま,浦添,宜野湾,名護,糸満']
+].map(([name,block,n,places],i)=>({id:i,name,block,n,places:places.split(',')}));
+const BLOCKS=['北海道','東北','関東','北信越','東海','近畿','中国','四国','九州'];
+const MERGED=[['秋田・山形合同',['秋田県','山形県']],['埼玉・山梨合同',['埼玉県','山梨県']],['北陸合同',['富山県','石川県','福井県']],['奈良・和歌山合同',['奈良県','和歌山県']],['山陰合同',['鳥取県','島根県']],['徳島・香川合同',['徳島県','香川県']],['愛媛・高知合同',['愛媛県','高知県']],['佐賀・長崎合同',['佐賀県','長崎県']],['大分・宮崎合同',['大分県','宮崎県']]];
+
+const SURNAMES='佐藤,鈴木,高橋,田中,伊藤,渡辺,山本,中村,小林,加藤,吉田,山田,佐々木,山口,松本,井上,木村,林,斎藤,清水,山崎,森,池田,橋本,阿部,石川,山下,中島,石井,小川,前田,岡田,長谷川,藤田,後藤,近藤,村上,遠藤,青木,坂本,斉藤,福田,太田,西村,藤井,金子,岡本,藤原,中野,三浦,原田,中川,松田,竹内,小野,田村,中山,和田,石田,森田,上田,原,内田,柴田,酒井,宮崎,横山,高木,安藤,宮本,大野,小島,谷口,今井,工藤,高田,増田,丸山,杉山,村田,大塚,新井,小山,平野,藤本,河野,上野,野口,武田,松井,千葉,岩崎,菅原,木下,久保,佐野,野村,松尾,市川,菊地,杉本,古川,大西,島田,水野,桜井,高野,渡部,吉川,山内,西田,飯田,菅野,中西,樋口,福島,永井,北村,秋山,小松,安田,川口,堀,中田,吉村,関,石原,大橋,荒井,本田,望月,小池,浅野,辻,川村,片山,早川,内藤,松下,星野,黒田,大島,堀内,中尾,岩田,宮田,原口,大谷,大久保,富田,小西,沢田,北川,東,土屋,服部,川上,浜田,森本,平田,宮下,吉岡,荒木,神田,熊谷,松岡,新田,北野,三宅,沖田,西川,河合,松浦,田口,奥村,篠原,関口,成田,桑原,古田,川崎,堤,白石,岩本,八木,大石,足立,上原,米田,大竹,竹田,中原,宇野,江口,今村,堀田,浅井,稲葉,滝沢,須藤,小倉,森下,佐久間,有村,野田,黒川'.split(',');
+const OKINAWA_SURNAMES='比嘉,金城,大城,宮城,新垣,上原,島袋,玉城,知念,山城,当山,仲宗根,照屋,具志堅,喜屋武,大田,宮里,平良,屋比久,與那覇'.split(',');
+const GIVEN='蓮,湊,陽翔,蒼,樹,大翔,悠真,朝陽,碧,律,颯,湊斗,悠斗,陽太,奏太,大和,蒼空,颯真,悠人,結翔,陽向,蒼真,大雅,瑛太,翔太,拓海,海斗,陸,健太,翼,大輝,颯太,優斗,航,晴,創,隼,蓮斗,琉生,遥斗,奏,凌,瑛斗,陽斗,智也,和真,一輝,壮真,啓太,昂,侑真,遼,怜,迅,周,亮,誠,司,駿,透,輝,匠,慧,渉,楓,岳,蒼汰,湊大,快,煌,蒼介,晴翔,瑞樹,健斗,俊介,将太,直樹,大地,光,空,海翔,柊,旭,暖,陽,伊吹,惺,奏汰,桜介,歩夢,碧斗,蒼生,一颯,湧,唯人,健人,隆之介,龍之介,虎太郎,幸太郎,健太郎,慎之介,祐希,勇気,晃,昊,航太,蒼太,悠,湊介,椋,廉,圭,翔,惇,温人,冬馬,夏樹,秋斗,春樹,大和,和樹,雄大,拓真,拓斗,航平,修平,康平,耕平,陽平,翔平,亮太,涼太,颯人,竜也,達也,拓也,和也,直也,雅也,勇斗,隼人,翔真,圭吾,大吾,健吾,蒼吾,瑛士,玲央,怜央,凪,渚,汐音,海里,岬,湊人,航輝,泳斗'.split(',');
+
+const STATS=['spd','end','pow','men','fr','ba','br','fl','st','tn'];
+const STAT_JA={spd:'スピード',end:'持久力',pow:'パワー',men:'メンタル',fr:'自由形',ba:'背泳ぎ',br:'平泳ぎ',fl:'バタフライ',st:'スタート',tn:'ターン'};
+const STROKES=['fr','ba','br','fl'];
+const STROKE_JA={fr:'自由形',ba:'背泳ぎ',br:'平泳ぎ',fl:'バタフライ',im:'個人メドレー'};
+const RANKS=['G','F','E','D','C','B','A','S','SS','SSS'];
+const RANK_TH=[20,40,60,80,100,120,140,160,220];
+const APT=['G','F','E','D','C','B','A','S'];
+const APT_MUL={G:.7,F:.8,E:.9,D:1,C:1.1,B:1.2,A:1.35,S:1.5};
+const APT_P=[5,10,20,25,20,12,6,2];
+const PERS=['真面目','負けず嫌い','気分屋','ムードメーカー','マイペース','繊細'];
+const GROWTH={早熟:[1.4,1,.7],安定:[1.1,1,.9],晩成:[.8,1,1.3]};
+const TIERS=['駆け出し校','弱小校','中堅校','上位校','強豪校'];
+
+/* 種目：限界タイム（長水路、100IMは短水路）*/
+const EV={
+ '50Fr':['fr',50,22.0],'100Fr':['fr',100,48.5],'200Fr':['fr',200,106],'400Fr':['fr',400,226],'1500Fr':['fr',1500,900],
+ '50Ba':['ba',50,25.0],'100Ba':['ba',100,53.5],'200Ba':['ba',200,116],
+ '50Br':['br',50,27.5],'100Br':['br',100,59.5],'200Br':['br',200,129],
+ '50Fl':['fl',50,23.5],'100Fl':['fl',100,52.0],'200Fl':['fl',200,116],
+ '100IM':['im',100,53.0],'200IM':['im',200,118],'400IM':['im',400,252]
+};
+function evName(k){if(k[0]==='R')return RELAY[k].name;const [s,d]=EV[k];return d+'m'+STROKE_JA[s];}
+const RELAY={R400FR:{name:'4×100mフリーリレー',legs:['100Fr','100Fr','100Fr','100Fr']},R800FR:{name:'4×200mフリーリレー',legs:['200Fr','200Fr','200Fr','200Fr']},R400MR:{name:'4×100mメドレーリレー',legs:['100Ba','100Br','100Fl','100Fr']}};
+const W={50:{spd:.40,end:0,pow:.15,tech:.30,st:.15,tn:0},100:{spd:.30,end:.15,pow:.10,tech:.30,st:.08,tn:.07},200:{spd:.15,end:.35,pow:.05,tech:.30,st:.05,tn:.10},400:{spd:.05,end:.50,pow:.05,tech:.30,st:.02,tn:.08},1500:{spd:.03,end:.55,pow:.02,tech:.30,st:.01,tn:.09}};
+
+/* 競技順序（熊本県高校総体 2025年度 要項の男子分を基本形に） */
+const ORDER1=['R400FR:p','100Br:p','400Fr:p','100Fr:p','100Ba:p','100Fl:p','100IM:t','400IM:t','100Br:f','400Fr:f','100Fr:f','100Ba:f','100Fl:f','R400FR:f'];
+const ORDER2=['R400MR:p','1500Fr:t','50Fr:p','50Ba:p','50Br:p','50Fl:p','200Ba:p','200Fl:p','200Fr:p','200IM:p','200Br:p','R400MR:f','50Fr:f','50Ba:f','50Br:f','50Fl:f','200Ba:f','200Fl:f','200Fr:f','200IM:f','200Br:f','R800FR:t'];
+const EV_HS=['50Fr','100Fr','200Fr','400Fr','1500Fr','50Ba','100Ba','200Ba','50Br','100Br','200Br','50Fl','100Fl','200Fl','200IM','400IM'];
+const EV_JOS=['50Fr','100Fr','200Fr','400Fr','1500Fr','100Ba','200Ba','100Br','200Br','100Fl','200Fl','200IM','400IM'];
+const EV_JOW=EV_JOS.concat(['50Ba','50Br','50Fl','100IM']);
+const EV_KSA=['50Fr','100Fr','400Fr','200Ba','200Br','200Fl','400IM'];
+const EV_KSB=['50Fr','100Fr','400Fr','100Ba','100Br','100Fl','200IM'];
+
+/* 標準記録 */
+const STD_BLOCK={'50Fr':26.06,'100Fr':57.15,'200Fr':128.32,'400Fr':279.01,'1500Fr':1100.09,'50Ba':29.50,'100Ba':67.49,'200Ba':149.34,'50Br':32.45,'100Br':72.10,'200Br':159.89,'50Fl':27.73,'100Fl':63.29,'200Fl':148.01,'200IM':145.70,'400IM':326.29,R400FR:246.40,R800FR:564.48,R400MR:274.52};
+const STD_IH={'50Fr':23.83,'100Fr':52.55,'200Fr':114.84,'400Fr':244.85,'1500Fr':975.06,'50Ba':27.09,'100Ba':57.96,'200Ba':125.67,'50Br':29.79,'100Br':64.46,'200Br':139.76,'50Fl':25.46,'100Fl':56.34,'200Fl':125.67,'200IM':127.84,'400IM':273.02,R400FR:216.40,R800FR:475.10,R400MR:238.34};
+
+/* 新入部員の出身タイプ：[基礎,得意泳法,その他,POT] */
+const ORIGINS={club:{ja:'スイミングクラブ出身',r:[[60,90],[75,105],[45,75],[83,143]]},chu:{ja:'中学水泳部出身',r:[[38,68],[53,83],[23,53],[68,128]]},other:{ja:'他競技出身',r:[[45,75],[15,38],[8,30],[60,135]]},beg:{ja:'初心者',r:[[15,38],[15,30],[8,23],[45,143]]}};
+const ORIGIN_P=[[5,20,25,50],[10,25,25,40],[20,30,25,25],[30,30,20,20],[40,30,15,15]];
+const TIER_START=[{kaku:5,n:5,fac:'none'},{kaku:25,n:12,fac:'out'},{kaku:45,n:18,fac:'out'},{kaku:65,n:22,fac:'out3'},{kaku:85,n:28,fac:'in'}];
+const MENUS={
+ end:{ja:'持久スイム',pool:true,hi:false,g:{end:.28,spd:.04,fr:.05,ba:.05,br:.05,fl:.05},desc:'持久力↑ 泳法も少し'},
+ spd:{ja:'スピードスイム',pool:true,hi:true,g:{spd:.25,pow:.08,st:.12,tn:.12},desc:'スピード・パワー・スタート・ターン↑'},
+ tec:{ja:'技術スイム',pool:true,hi:false,g:{tn:.10},fav:.25,oth:.08,desc:'得意泳法を大きく、他の泳法も↑'},
+ land:{ja:'陸上トレーニング',pool:false,hi:false,g:{pow:.22,end:.10,spd:.05},desc:'パワー・持久力↑'},
+ mtg:{ja:'ミーティング・調整',pool:false,hi:false,g:{men:.15,spd:.02,end:.02,pow:.02,fr:.02,ba:.02,br:.02,fl:.02,st:.02,tn:.02},desc:'メンタル・士気↑ 大会前の調整'}
+};
+const DUTIES={
+ research:{ja:'練習計画の研究',desc:'次の1週間、練習の伸び×1.05'},
+ scout:{ja:'他校の偵察',desc:'次の大会に出る他校1校の選手ランクを見る'},
+ visit:{ja:'中学・クラブ訪問',desc:'翌年度の新入部員に経験者が増える'},
+ recruit:{ja:'勧誘活動',desc:'新入部員を集める（4月前半のみ）'},
+ study:{ja:'勉強会',desc:'次の定期試験で全員の点数アップ'},
+ clinic:{ja:'地域の水泳教室',desc:'格＋1（年1回・3万円）'},
+ parents:{ja:'保護者会',desc:'全員の士気＋2・苦情が起きにくい（月1回）'},
+ rest:{ja:'休む',desc:'何もしない'}
+};
+const RECRUIT={show:{ja:'部活紹介で泳ぎを見せる'},trial:{ja:'体験入部を手厚くする'},poster:{ja:'ポスター・SNSで告知'},scout:{ja:'中学・クラブへ声をかける'}};
+const TALK=[{k:'A',ja:'寄り添う',line:'「気持ちはわかる。少し休んでもいいんだぞ」'},{k:'B',ja:'目標を示す',line:'「もう一度、一緒に目標を決め直そう」'},{k:'C',ja:'必要とする',line:'「お前がいないとチームが困るんだ」'},{k:'D',ja:'突き放す',line:'「辞めたいなら止めない。自分で決めろ」'}];
+const TALK_T={真面目:'BACD',負けず嫌い:'DBCA',気分屋:'ACDB',ムードメーカー:'CABD',マイペース:'ABDC',繊細:'ABCD'};
+/* ===== 共通 ===== */
+const R=Math.random;
+const ri=(a,b)=>a+Math.floor(R()*(b-a+1));
+const rf=(a,b)=>a+R()*(b-a);
+const clamp=(v,a,b)=>v<a?a:v>b?b:v;
+const pick=a=>a[Math.floor(R()*a.length)];
+function gauss(){let u=0,v=0;while(!u)u=R();while(!v)v=R();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+function wpick(ws){const t=ws.reduce((a,b)=>a+b,0);let r=R()*t;for(let i=0;i<ws.length;i++){r-=ws[i];if(r<0)return i;}return ws.length-1;}
+function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+let UID=1;const uid=()=>UID++;
+
+/* 日付（UTCで扱う） */
+const s2d=s=>{const[y,m,d]=s.split('-').map(Number);return new Date(Date.UTC(y,m-1,d));};
+const d2s=d=>d.toISOString().slice(0,10);
+const addD=(s,n)=>{const d=s2d(s);d.setUTCDate(d.getUTCDate()+n);return d2s(d);};
+const dow=s=>s2d(s).getUTCDay();
+const ymd=(y,m,d)=>d2s(new Date(Date.UTC(y,m-1,d)));
+const WD='日月火水木金土';
+function nthMon(y,m,n){const d=new Date(Date.UTC(y,m-1,1));const off=(8-d.getUTCDay())%7;d.setUTCDate(1+off+7*(n-1));return d2s(d);}
+function fmtDate(s){const d=s2d(s);return `${d.getUTCFullYear()}年${d.getUTCMonth()+1}月${d.getUTCDate()}日（${WD[d.getUTCDay()]}）`;}
+function fmtMD(s){const d=s2d(s);return `${d.getUTCMonth()+1}/${d.getUTCDate()}`;}
+const HOL_CACHE={};
+function holidays(y){
+ if(HOL_CACHE[y])return HOL_CACHE[y];
+ const H=new Set([ymd(y,1,1),ymd(y,2,11),ymd(y,2,23),ymd(y,4,29),ymd(y,5,3),ymd(y,5,4),ymd(y,5,5),ymd(y,8,11),ymd(y,11,3),ymd(y,11,23),
+  nthMon(y,1,2),nthMon(y,7,3),nthMon(y,9,3),nthMon(y,10,2)]);
+ const b=y-1980;H.add(ymd(y,3,Math.floor(20.8431+0.242194*b-Math.floor(b/4))));H.add(ymd(y,9,Math.floor(23.2488+0.242194*b-Math.floor(b/4))));
+ const list=[...H].sort();
+ for(const h of list){if(dow(h)===0){let n=addD(h,1);while(H.has(n))n=addD(n,1);H.add(n);}}
+ for(const h of [...H]){const n2=addD(h,2);if(H.has(n2)&&!H.has(addD(h,1))&&dow(addD(h,1))!==0)H.add(addD(h,1));}
+ HOL_CACHE[y]=H;return H;
+}
+const isHol=s=>holidays(+s.slice(0,4)).has(s);
+
+/* 時間・ランク表示 */
+function fmtT(t){if(t==null)return '—';const m=Math.floor(t/60);const s=t-60*m;return m?`${m}:${s.toFixed(2).padStart(5,'0')}`:s.toFixed(2);}
+function rank(v){let i=0;while(i<RANK_TH.length&&v>=RANK_TH[i])i++;return RANKS[i];}
+function rank10(v){return RANKS[clamp(Math.ceil(v/10)-1,0,9)];}
+const yen=n=>n.toLocaleString('ja-JP')+'円';
+const tierOf=k=>k<=20?0:k<=40?1:k<=60?2:k<=80?3:4;
+const kakuRank=k=>RANKS[clamp(Math.ceil(k/10)-1,0,9)];
+
+/* ===== 学校の名簿（固定シードで毎回同じ） ===== */
+function buildSchools(){
+ const rnd=mulberry(20250401);const out=[];let id=0;
+ const pk=a=>a[Math.floor(rnd()*a.length)];
+ for(const P of PREFS){
+  const pre=P.name==='東京都'?'都立':P.name==='北海道'?'道立':(P.name==='大阪府'||P.name==='京都府')?'府立':'県立';
+  const used=new Set();const n=P.n;
+  const tiers=[];const share=[.20,.33,.30,.12,.05];
+  const cnt=share.map(s=>Math.floor(s*n));let rest=n-cnt.reduce((a,b)=>a+b,0);
+  if(n>=8&&cnt[4]===0){cnt[4]=1;rest--;}
+  if(n>=6&&cnt[3]===0&&rest>0){cnt[3]=1;rest--;}
+  cnt[2]+=rest;if(cnt[2]<0){cnt[1]+=cnt[2];cnt[2]=0;}
+  cnt.forEach((c,t)=>{for(let i=0;i<c;i++)tiers.push(t);});
+  for(let i=tiers.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[tiers[i],tiers[j]]=[tiers[j],tiers[i]];}
+  for(let i=0;i<n;i++){
+   const t=tiers[i];const priv=rnd()<(t===4?.6:.25);let name,guard=0;
+   do{const pl=pk(P.places);
+    if(priv){name=pl+pk(['学園','学院','大学附属','国際','学園','学院'])+'高校';}
+    else{const r=rnd();name=pre+pl+(r<.4?'':r<.75?pk(['北','南','東','西','中央']):pk(['工業','商業','農業','総合']))+'高校';}
+    guard++;if(guard>50)name=(priv?'':pre)+pl+'第'+(i+1)+'高校';
+   }while(used.has(name));
+   used.add(name);
+   const lo=[1,21,41,61,81][t];const kaku=lo+Math.floor(rnd()*20);
+   out.push({id:id++,name,pref:P.id,kaku,tier0:t,priv});
+  }
+ }
+ return out;
+}
+
+/* ===== 総合値とタイム ===== */
+const baseEv=k=>k.includes('|')?k.split('|')[1]:k;
+function techOf(p,str){if(str!=='im')return p.s[str];const v=STROKES.map(s=>p.s[s]);const a=v.reduce((x,y)=>x+y,0)/4;return a-0.5*(a-Math.min(...v));}
+function xOf(p,ev,course){
+ const [str,dist]=EV[baseEv(ev)];let w={...W[dist>=800?1500:dist]};
+ if(course==='SC'){w.tn*=2;const t=Object.values(w).reduce((a,b)=>a+b,0);for(const k in w)w[k]/=t;}
+ const v=w.spd*p.s.spd+w.end*p.s.end+w.pow*p.s.pow+w.tech*techOf(p,str)+w.st*p.s.st+w.tn*p.s.tn;
+ return v/150;
+}
+function tOf(ev,x,course){
+ const [,,lim]=EV[baseEv(ev)];const beg=lim*1.45;
+ let t=x<=1?beg-(beg-lim)*(1-Math.pow(Math.max(0,1-x),1.4)):lim*(1-0.045*(x-1));
+ if(course==='SC'&&baseEv(ev)!=='100IM')t*=0.975;return t;
+}
+function xFromT(ev,t,course){
+ const [,,lim]=EV[baseEv(ev)];const beg=lim*1.45;
+ if(course==='SC'&&baseEv(ev)!=='100IM')t/=0.975;
+ if(t>=lim){const f=clamp((beg-t)/(beg-lim),0,1);return 1-Math.pow(1-f,1/1.4);}
+ return 1+(1-t/lim)/0.045;
+}
+const xFromS=s=>(22+0.9*s)/150;
+const legTO=p=>0.4+Math.min(p.s.st,150)/375;
+function relayVT(rv,x,course){return RELAY[rv].legs.reduce((a,l)=>a+tOf(l,x,course),0)-1.8;}
+function stdTime(table,ev,course){return table[ev];}
+function joStd(ev,course){if(ev[0]==='R'){return relayVT(ev,0.62,course);}return tOf(ev,0.62,course);}
+
+/* 得意距離 */
+function favDist(p){
+ const S=p.s;const sc={50:(.4*S.spd+.15*S.pow)/.55,100:(.3*S.spd+.15*S.end+.1*S.pow)/.55,200:(.15*S.spd+.35*S.end+.05*S.pow)/.55,400:(.05*S.spd+.5*S.end+.05*S.pow)/.6,1500:(.03*S.spd+.55*S.end+.02*S.pow)/.6};
+ const v=Object.values(sc);const mx=Math.max(...v),mn=Math.min(...v);
+ if(mn>0&&(mx-mn)/mx<0.03)return 200;
+ let best=50;for(const k in sc)if(sc[k]>sc[best])best=+k;return best;
+}
+function favEvent(p){
+ const d=favDist(p);const s=p.fav;const opts=Object.keys(EV).filter(k=>EV[k][0]===s);
+ let best=opts[0];for(const k of opts)if(Math.abs(EV[k][1]-d)<Math.abs(EV[best][1]-d))best=k;return best;
+}
+
+/* ===== 名前 ===== */
+function makeName(okinawa,taken){
+ for(let g=0;g<30;g++){
+  let sur;if(okinawa&&R()<.7)sur=pick(OKINAWA_SURNAMES);else{const i=wpick(SURNAMES.map((_,i)=>1/(i+12)));sur=SURNAMES[i];}
+  const giv=pick(GIVEN);const n=sur+' '+giv;if(!taken||!taken.has(n))return n;
+ }
+ return pick(SURNAMES)+' '+pick(GIVEN);
+}
+
+/* ===== 選手の生成 ===== */
+function drawApt(){return APT[wpick(APT_P)];}
+function finishPlayer(p){
+ p.cap={};for(const k of STATS)p.cap[k]=clamp(p.pot+ri(-15,15),Math.ceil(p.s[k])+5,300);
+ p.wk=[{...p.s}];p.rh=[];p.best={};p.res=[];p.exams=[];return p;
+}
+function genOwn(origin,grade,sid,okinawa,taken){
+ const O=ORIGINS[origin].r;const p={id:uid(),nm:makeName(okinawa,taken),g:grade,sc:sid,org:origin,s:{},mor:50,cond:2,inj:0,hoshu:0,low:0,slump:0,ret:false,talkDay:null};
+ for(const k of ['spd','end','pow'])p.s[k]=ri(...O[0]);
+ if(origin==='other')p.s[pick(['spd','end','pow'])]+=15;
+ p.s.men=ri(30,105);p.fav=pick(STROKES);
+ for(const s of STROKES)p.s[s]=s===p.fav?ri(...O[1]):ri(...O[2]);
+ p.s.st=ri(...O[2]);p.s.tn=ri(...O[2]);
+ p.apt={};for(const s of STROKES)p.apt[s]=drawApt();
+ while(APT.indexOf(p.apt[p.fav])<4)p.apt[p.fav]=drawApt();
+ p.kika=R()<.01;p.pot=p.kika?ri(160,300):ri(...O[3]);
+ p.type=['早熟','安定','晩成'][wpick([30,45,25])];p.pers=pick(PERS);
+ p.gak=clamp(Math.round(50+gauss()*15),1,100);
+ return finishPlayer(p);
+}
+function genOther(sid,kaku,ev,xTarget,course,okinawa,taken){
+ const p={id:uid(),nm:makeName(okinawa,taken),g:ri(1,3),sc:sid,s:{},mor:50,cond:wpick([10,25,30,25,10]),inj:0,other:true};
+ const mean=22+0.9*kaku+(p.g===1?-9:p.g===3?9:0);
+ for(const k of STATS)p.s[k]=clamp(mean+gauss()*12,5,300);
+ const str=EV[baseEv(ev)][0];p.fav=str==='im'?pick(STROKES):str;p.s[p.fav]+=10;
+ p.apt={};for(const s of STROKES)p.apt[s]=drawApt();
+ p.kika=R()<.01;if(p.kika)for(const k of STATS)p.s[k]*=1.3;
+ p.type=['早熟','安定','晩成'][wpick([30,45,25])];p.pers=pick(PERS);
+ if(xTarget!=null){const x0=xOf(p,ev,course);const f=xTarget/x0;for(const k of STATS)p.s[k]=clamp(p.s[k]*f,3,300);}
+ p.pot=p.kika?ri(160,300):clamp(Math.max(...Object.values(p.s))+ri(0,30),45,300);
+ return finishPlayer(p);
+}
+const GROW_RATE=1.0; /* 練習の伸びの全体倍率（調整用） */
+/* ===== ゲーム状態 ===== */
+let G=null;let SCHOOLS_BASE=null;
+const MEETS=[
+ {k:'haru',ja:'県春季大会',m:5,w:3,g:1,c:'LC',scope:'pref',ev:EV_HS,rl:['R400FR','R800FR','R400MR']},
+ {k:'sotai',ja:'県高校総体',m:6,w:3,g:1,c:'LC',scope:'pref',ev:EV_HS,rl:['R400FR','R800FR','R400MR'],exp:true},
+ {k:'block',ja:'ブロック大会',m:7,w:4,g:2,c:'LC',scope:'block',ev:EV_HS,rl:['R400FR','R800FR','R400MR'],from:'sotai'},
+ {k:'ih',ja:'インターハイ',m:8,w:3,g:3,c:'LC',scope:'nat',ev:EV_HS,rl:['R400FR','R800FR','R400MR'],from:'block',exp:true},
+ {k:'jos',ja:'夏季JO',m:8,w:4,g:2,c:'LC',scope:'jo',ev:EV_JOS,rl:['R400FR','R400MR'],timed:true},
+ {k:'shinjin',ja:'県新人戦',m:9,w:2,g:1,c:'LC',scope:'pref',ev:EV_HS,rl:['R400FR','R800FR','R400MR'],newbie:true,exp:true},
+ {k:'kokuspo',ja:'国スポ',m:9,w:3,g:3,c:'LC',scope:'ks',ev:EV_KSA.map(e=>'A|'+e).concat(EV_KSB.map(e=>'B|'+e)),rl:[]},
+ {k:'chihou',ja:'地方新人大会',m:11,w:2,g:2,c:'LC',scope:'block',ev:EV_HS,rl:['R400FR','R800FR','R400MR'],from:'shinjin',newbie:true},
+ {k:'sck',ja:'県短水路記録会',m:1,w:4,g:0,c:'SC',scope:'pref',ev:EV_JOW,rl:['R400FR','R400MR'],timed:true,rec:true},
+ {k:'joy',ja:'春季JO県予選',m:2,w:4,g:0,c:'SC',scope:'pref',ev:EV_JOW,rl:['R400FR','R400MR'],timed:true,rec:true},
+ {k:'jow',ja:'春季JO',m:3,w:4,g:2,c:'SC',scope:'jo',ev:EV_JOW,rl:['R400FR','R400MR'],timed:true}
+];
+const meetDef=k=>MEETS.find(m=>m.k===k);
+
+function buildYear(fy){
+ const Y={fy,meets:{},exams:[]};let prev=null;
+ for(const M of MEETS){
+  const y=M.m<=3?fy+1:fy;let mon=nthMon(y,M.m,M.w);const sh=ri(-1,1);let c=addD(mon,7*sh);
+  if(prev&&c<=addD(prev,6))c=addD(prev,7);
+  if(addD(c,6)>ymd(fy+1,3,31))c=addD(c,-7);
+  Y.meets[M.k]={sat:addD(c,5),sun:addD(c,6),mon:c};prev=c;
+ }
+ for(const [m,ja] of [[5,'1学期中間試験'],[7,'1学期期末試験'],[10,'2学期中間試験'],[12,'2学期期末試験'],[3,'学年末試験']]){
+  const y=m<=3?fy+1:fy;const mon=nthMon(y,m,2);Y.exams.push({ja,start:mon,end:addD(mon,4)});
+ }
+ const lastEx=Y.exams[4].end;let spring=ymd(fy+1,3,18);if(lastEx>=spring)spring=addD(lastEx,1);
+ Y.vac=[[ymd(fy,7,25),ymd(fy,8,31),'夏休み'],[ymd(fy,12,25),ymd(fy+1,1,7),'冬休み'],[spring,ymd(fy+1,3,31),'春休み']];
+ Y.poolOpen=nthMon(fy,5,1);Y.poolClose=nthMon(fy,9,4);
+ Y.join=nthMon(fy,4,3);Y.grad=nthMon(fy+1,3,1);Y.recruitEnd=addD(nthMon(fy,4,2),6);
+ Y.camp=nthMon(fy,12,4);
+ return Y;
+}
+
+function dayInfo(s){
+ const Y=G.Y;const d=dow(s);const hol=isHol(s);
+ let meet=null;for(const k in Y.meets){const m=Y.meets[k];if(s===m.sat||s===m.sun)meet=k;}
+ const exam=Y.exams.find(e=>s>=e.start&&s<=e.end)||null;
+ const vac=Y.vac.find(v=>s>=v[0]&&s<=v[1])||null;
+ const camp=G.campBooked&&s>=Y.camp&&s<=addD(Y.camp,6);
+ let practice=[1,2,3,5,6].includes(d);if(camp)practice=true;
+ let mult=1,kind='平日';
+ if(d===6||hol){mult=1.5;kind=hol?'祝日':'土曜';}
+ if(vac){mult=1.5;kind=vac[2];}
+ if(exam){mult=.5;kind='試験期間';}
+ if(meet){practice=false;kind='大会';}
+ if(!practice&&!meet)kind='オフ日';
+ if(camp&&practice)kind='冬合宿';
+ return {d,hol,meet,exam,vac,practice,mult,kind,camp};
+}
+function poolOK(s){
+ const f=G.fac,Y=G.Y;
+ if(f==='in')return {ok:true};
+ if(G.campBooked&&s>=Y.camp&&s<=addD(Y.camp,6))return {ok:true,camp:true};
+ const open=s>=Y.poolOpen&&s<Y.poolClose;
+ if(f!=='none'&&open)return {ok:true};
+ const lim=f==='none'||f==='out3'?3:2;const cost=f==='none'?0:5000;
+ if(G.poolUse>=lim)return {ok:false,why:`今週の外部プールは${lim}回まで`};
+ if(G.money<cost)return {ok:false,why:'予算が足りない'};
+ return {ok:true,ext:true,cost};
+}
+
+function poolWeek(s){
+ const f=G.fac,Y=G.Y;
+ if(f==='in')return {free:true,txt:'学校の屋内プール：回数の制限なし'};
+ if(G.campBooked&&s>=Y.camp&&s<=addD(Y.camp,6))return {free:true,txt:'冬合宿中：毎日使える（費用なし）'};
+ if(f!=='none'&&s>=Y.poolOpen&&s<Y.poolClose)return {free:true,txt:'学校のプール：回数の制限なし'};
+ const lim=f==='none'||f==='out3'?3:2;const cost=f==='none'?0:5000;const left=Math.max(0,lim-G.poolUse);
+ return {free:false,left,lim,txt:`${f==='none'?'市営プール':'外部プール'}：今週あと${left}回（週${lim}回まで・${cost?'1回'+yen(cost):'無料'}）`};
+}
+/* 格（区分）による練習環境 */
+const TRAIN=[
+ {ja:'監督ひとり',mult:.90,inj:1.2,ex:{}},
+ {ja:'監督ひとり',mult:.95,inj:1.1,ex:{}},
+ {ja:'外部コーチ（週1回）と筋トレ器具',mult:1.00,inj:1.0,ex:{land:{pow:.04}}},
+ {ja:'専属コーチと映像分析',mult:1.08,inj:.8,ex:{land:{pow:.04},end:{tn:.03},spd:{men:.03},mtg:{men:.05}}},
+ {ja:'コーチ陣とトレーナー',mult:1.15,inj:.6,ex:{land:{pow:.04,end:.04},end:{tn:.03},spd:{men:.03,st:.03,tn:.03},mtg:{men:.05},tec:{st:.04,oth:.04}}}
+];
+const trainNow=()=>TRAIN[tierOf(mySchool().kaku)];
+function menuExtra(k){const x=trainNow().ex[k];if(!x)return '';return Object.keys(x).map(s=>s==='oth'?'他の泳法':STAT_JA[s]).join('・');}
+function newGame(prefId,tier,schoolId,schoolName){
+ if(!SCHOOLS_BASE)SCHOOLS_BASE=buildSchools();
+ const schools=SCHOOLS_BASE.map(s=>({...s}));
+ const me=schools.find(s=>s.id===schoolId);me.kaku=TIER_START[tier].kaku;if(schoolName)me.name=schoolName;me.own=true;
+ G={v:1,fy:2025,date:'2025-04-01',pref:prefId,sid:schoolId,tier0:tier,fac:TIER_START[tier].fac,schools,own:[],others:{},obs:[],
+   money:0,notices:[],todayLog:[],weekUps:[],week:null,menuStreak:{m:null,n:0},hiDays:0,lastHiDays:0,poolUse:0,researchUntil:null,
+   recruitN:0,recruitActs:[],visitBonus:0,studyBonus:0,clinicFY:null,parentsMonth:null,campBooked:false,mtgDays:[],
+   qual:{},results:[],records:{},obsSet:{},flags:{},scouted:{},relaySel:null,talk:null,kaku0:me.kaku,hist:[],nextId:1,lastMenu:null,ksSel:[],yearLog:[]};
+ G.Y=buildYear(2025);G.money=200000+me.kaku*5000;
+ const n=TIER_START[tier].n;const taken=nameSet();const oki=PREFS[prefId].name==='沖縄県';
+ for(let i=0;i<n;i++){
+  const og=['club','chu','other','beg'][wpick(ORIGIN_P[tier])];
+  const ok=tier===0?pick(['other','beg']):og;
+  const g=(i%3)+1;const p=genOwn(ok,g,schoolId,oki,taken);taken.add(p.nm);
+  const add=g===2?8:g===3?15:0;for(const k of STATS)p.s[k]=Math.min(p.s[k]+add,p.cap[k]);p.wk=[{...p.s}];
+  G.own.push(p);
+ }
+ G.own.forEach(p=>p.rh.push({d:'2025-04',r:ranksOf(p)}));
+ note('2025年度が始まった。部員は'+n+'人。');
+ return G;
+}
+function nameSet(){const s=new Set();if(!G)return s;G.own.forEach(p=>s.add(p.nm));for(const k in G.others)G.others[k].forEach(p=>s.add(p.nm));G.obs.forEach(o=>s.add(o.nm));return s;}
+function mySchool(){return G.schools[G.sid];}
+function ranksOf(p){const r={};for(const k of STATS)r[k]=rank(p.s[k]);return r;}
+function note(t,type){G.todayLog.push({t,type:type||''});}
+function active(p){return !p.ret&&p.g<=3;}
+function groupOf(prefId){const nm=PREFS[prefId].name;const m=MERGED.find(x=>x[1].includes(nm));return m?{name:m[0],prefs:m[1].map(n=>PREFS.find(p=>p.name===n).id)}:{name:nm,prefs:[prefId]};}
+function allGroups(){const seen=new Set();const out=[];for(const P of PREFS){const g=groupOf(P.id);if(seen.has(g.name))continue;seen.add(g.name);out.push(g);}return out;}
+function schoolsIn(prefs){return G.schools.filter(s=>prefs.includes(s.pref));}
+function membersOf(s){return s.own?G.own.filter(active).length:Math.round(5+s.kaku*.23);}
+function addKaku(sch,d,why){const b=sch.kaku;sch.kaku=clamp(sch.kaku+d,1,100);if(sch.own&&d!==0&&why)note(`格${d>0?'＋':''}${d}（${why}）`,d>0?'up':'down');
+ if(sch.own&&b<61&&sch.kaku>=61&&G.fac!=='in'&&!G.poolApplied)note('格がAに届いた。屋内プールの整備を申請できる（学校タブ）','up');return sch.kaku-b;}
+function canApplyPool(){return G.fac!=='in'&&!G.poolApplied&&mySchool().kaku>=61;}
+function applyPool(){if(!canApplyPool())return false;G.poolApplied=G.fy;note('屋内プールの整備を申請した。来年度の4月から使える','up');return true;}
+
+/* ===== 1日の進行 ===== */
+function practice(menuKey){
+ const s=G.date,I=dayInfo(s),M=MENUS[menuKey];
+ if(M.pool){const P=poolOK(s);if(!P.ok)return P.why;if(P.ext){G.poolUse++;G.money-=P.cost;}}
+ const research=G.researchUntil&&s<=G.researchUntil?1.05:1;const camp=I.camp?1.3:1;
+ const act=G.own.filter(active);const over=act.length>30?1-.02*(act.length-30):1;const T=trainNow();
+ for(const p of act){
+  if(p.hoshu>0){p.hoshu--;continue;}
+  if(p.inj>0&&M.pool)continue;
+  const before=ranksOf(p);
+  const eff=GROW_RATE*T.mult*(p.pers==='真面目'?1.1:1)*(.75+p.mor/200)*over*research*camp*I.mult*GROWTH[p.type][p.g-1];
+  const gains={...M.g};const ex=T.ex[menuKey]||{};
+  for(const k in ex)if(k!=='oth')gains[k]=(gains[k]||0)+ex[k];
+  if(menuKey==='tec'){for(const st of STROKES)gains[st]=(gains[st]||0)+(st===p.fav?M.fav:M.oth+(ex.oth||0));}
+  for(const k in gains){
+   if(p.s[k]>=p.cap[k])continue;
+   let d=gains[k]*eff;if(STROKES.includes(k))d*=APT_MUL[p.apt[k]];
+   d*=Math.max(.05,1-Math.pow(p.s[k]/p.cap[k],2));
+   p.s[k]=Math.min(p.cap[k],p.s[k]+d);
+  }
+  const after=ranksOf(p);
+  for(const k of STATS)if(after[k]!==before[k]){const t=`${p.nm}の${STAT_JA[k]}が${before[k]}から${after[k]}に上がった`;note(t,after[k]==='SS'&&before[k]==='S'?'kika':'rank');G.weekUps.push(t);}
+  if(menuKey==='mtg')p.mor=clamp(p.mor+3,0,100);
+  if(M.hi&&p.inj===0&&R()<.002*I.mult*T.inj*(p.pers==='マイペース'?.5:1)){p.inj=R()<.9?ri(7,14):ri(28,56);p.mor=clamp(p.mor-10,0,100);note(`${p.nm}がけがをした（約${Math.ceil(p.inj/7)}週間）`,'down');}
+ }
+ if(M.hi)G.hiDays++;
+ if(menuKey==='mtg')G.mtgDays.push(s);
+ if(G.menuStreak.m===menuKey)G.menuStreak.n++;else G.menuStreak={m:menuKey,n:1};
+ if(G.menuStreak.n>=5){act.forEach(p=>p.mor=clamp(p.mor-3,0,100));note('同じ練習が5日続き、部員の士気が下がった','down');G.menuStreak.n=0;}
+ G.lastMenu=menuKey;
+ return null;
+}
+function duty(k,arg){
+ const s=G.date;const sch=mySchool();
+ if(k==='research'){G.researchUntil=addD(s,7);note('練習計画を研究した。1週間、練習の伸びが良くなる');}
+ if(k==='scout'){G.scouted[arg]=G.fy;note(G.schools[arg].name+'を偵察した');}
+ if(k==='visit'){G.visitBonus=Math.min(10,G.visitBonus+2);note('中学・クラブを訪問した');}
+ if(k==='recruit'){G.recruitActs.push(arg);G.recruitN++;note('勧誘：'+RECRUIT[arg].ja);}
+ if(k==='study'){G.studyBonus=3;note('勉強会を開いた');}
+ if(k==='clinic'){G.money-=30000;G.clinicFY=G.fy;addKaku(sch,1,'地域の水泳教室');}
+ if(k==='parents'){G.parentsMonth=s.slice(0,7);G.own.filter(active).forEach(p=>p.mor=clamp(p.mor+2,0,100));note('保護者会を開いた');}
+}
+function dutyOK(k){
+ const s=G.date;
+ if(k==='recruit')return s<=G.Y.recruitEnd&&G.recruitN<2;
+ if(k==='study'){const e=G.Y.exams.find(e=>s<=e.end&&s>=addD(e.start,-14));return !!e&&G.studyBonus===0;}
+ if(k==='clinic')return G.clinicFY!==G.fy&&G.money>=30000;
+ if(k==='parents')return G.parentsMonth!==s.slice(0,7);
+ if(k==='scout'){const m=nextMeet();return !!m&&m.sat<=addD(s,28)&&m.sat>s;}
+ return true;
+}
+function nextMeet(){let best=null;for(const k in G.Y.meets){const m=G.Y.meets[k];if(m.sat>=G.date&&(!best||m.sat<best.sat))best={k,...m};}return best;}
+
+/* 日付を1日進める（練習または監督業のあと） */
+function endDay(){
+ const s=G.date;const I=dayInfo(s);
+ // 試験の終わり
+ const ex=G.Y.exams.find(e=>e.end===s);if(ex)runExam(ex);
+ G.own.forEach(p=>{if(p.inj>0){p.inj--;if(p.inj===0)note(p.nm+'のけがが治った','up');}});
+ const ns=addD(s,1);G.date=ns;
+ G.hist.push({d:s,log:G.todayLog});if(G.hist.length>40)G.hist.shift();
+ G.notices=G.todayLog;G.todayLog=[];
+ startDay();
+}
+function startDay(){
+ const s=G.date;const d=dow(s);
+ if(s>=ymd(G.fy+1,4,1))newYear();
+ if(s.slice(8)==='01'){G.own.forEach(p=>p.rh.push({d:s.slice(0,7),r:ranksOf(p)}));}
+ if(d===1)weekly();
+ if(d===0)weekSummary();
+ if(s===G.Y.join)joinNew();
+ if(s===G.Y.grad)graduate();
+ if(s===G.Y.poolOpen&&(G.fac==='out'||G.fac==='out3'))note('学校のプールが使えるようになった');
+ if(s===G.Y.poolClose&&(G.fac==='out'||G.fac==='out3'))note('学校のプールが閉まった。プールの練習は外部施設になる');
+ if(s===addD(G.Y.meets.ih.sun,1))retire3();
+ if(s===addD(G.Y.meets.kokuspo.sun,1))G.own.forEach(p=>{if(p.g===3&&p.ksRep)p.ret=true;});
+ const t=G.own.find(p=>p.talkDay===s&&active(p));if(t){G.talk={pid:t.id,bad:drawTalkBad(t.pers)};t.talkDay=null;}
+ // 大会の判定
+ const I=dayInfo(s);
+ if(I.meet&&s===G.Y.meets[I.meet].sat){G.pendingMeet=I.meet;}
+}
+function retire3(){G.own.forEach(p=>{if(p.g===3&&!p.ksRep&&!p.ret)p.ret=true;});note('インターハイが終わり、3年生が引退した');}
+function weekly(){
+ const act=G.own.filter(active);
+ G.weekStart={};act.forEach(p=>G.weekStart[p.id]={...p.s});
+ for(const p of act){
+  p.wk.push({...p.s});if(p.wk.length>5)p.wk.shift();
+  const w=p.pers==='気分屋'?2:1;const sc=(p.mor-50)+rf(-10,10)*w;
+  p.cond=sc>=20?0:sc>=8?1:sc>=-7?2:sc>=-19?3:4;
+  if(p.pers==='繊細'&&p.cond>=3)p.mor=clamp(p.mor-5,0,100);
+  if(R()<.01){p.mor=clamp(p.mor-10,0,100);note(p.nm+'に家庭の事情があり、元気がない','down');}
+  if(p.mor<=10)p.low++;else p.low=0;
+  if(p.low>=4&&!p.talkDay&&R()<.2){p.talkDay=addD(G.date,ri(0,6));}
+ }
+ const mm=act.filter(p=>p.pers==='ムードメーカー').length;if(mm)act.forEach(p=>p.mor=clamp(p.mor+mm,0,100));
+ // 後輩に抜かれる
+ for(const p of act){const fe=favEvent(p);const mine=xOf(p,fe,'LC');const by=act.find(q=>q.g<p.g&&xOf(q,fe,'LC')>mine);const key=p.id+'>'+fe;
+  if(by&&!G.flags[key]){G.flags[key]=1;p.mor=clamp(p.mor-5,0,100);note(`${p.nm}が${evName(fe)}で後輩の${by.nm}に抜かれた`,'down');}}
+ const sch=mySchool();
+ if(act.length&&act.filter(p=>p.mor<=30).length/act.length>=.3&&R()<.03){addKaku(sch,-3,'部内の不和');act.forEach(p=>p.mor=clamp(p.mor-5,0,100));}
+ if(G.hiDays>=3&&R()<.2*(G.parentsMonth===G.date.slice(0,7)?.5:1))addKaku(sch,-2,'保護者からの苦情');
+ const inj=act.filter(p=>p.inj>0).length;if(inj>=3&&!G.flags.injWave){G.flags.injWave=1;addKaku(sch,-2,'けが人の続出');}if(inj<3)G.flags.injWave=0;
+ G.hiDays=0;G.poolUse=0;
+}
+function weekSummary(){
+ const act=G.own.filter(active);const tops=[];
+ for(const p of act){const b=G.weekStart&&G.weekStart[p.id];if(!b)continue;const g=STATS.map(k=>[k,p.s[k]-b[k]]).sort((a,c)=>c[1]-a[1]).slice(0,2).filter(x=>x[1]>0.05);if(g.length)tops.push({nm:p.nm,k:g.map(x=>STAT_JA[x[0]])});}
+ G.week={ups:G.weekUps.slice(),tops};G.weekUps=[];
+}
+function arrow(p,k){const old=p.wk[0];if(!old||p.wk.length<2)return '';const d=p.s[k]-old[k];return d>=3?'↑↑':d>=1?'↑':'→';}
+
+/* 定期試験 */
+function runExam(ex){
+ let red=0;
+ for(const p of G.own.filter(active)){
+  const sub=[0,1,2,3,4].map(()=>clamp(Math.round(p.gak+gauss()*10+G.studyBonus),0,100));const tot=sub.reduce((a,b)=>a+b,0);
+  const diff=tot-p.gak*5;p.exams.push({ja:ex.ja,fy:G.fy,sub,tot});
+  if(diff<=-50)p.mor-=10;else if(diff<=-25)p.mor-=5;else if(diff>=50)p.mor+=5;
+  if(sub.some(v=>v<30)){p.mor-=10;p.hoshu=2;red++;}
+  p.mor=clamp(p.mor,0,100);
+ }
+ G.studyBonus=0;note(`${ex.ja}が終わった`+(red?`。赤点${red}人（補習で練習を2日休む）`:''),red?'down':'');
+}
+
+/* 退部の相談 */
+function drawTalkBad(pers){const t=TALK_T[pers];return t[wpick([5,15,25,55])];}
+function resolveTalk(choice){
+ const T=G.talk;const p=G.own.find(x=>x.id===T.pid);G.talk=null;if(!p)return null;
+ if(choice===T.bad){
+  G.own=G.own.filter(x=>x!==p);note(p.nm+'が退部した','down');
+  if(p.top8g2)addKaku(mySchool(),-2,'主力の退部');
+  return {left:true,p};
+ }
+ const order=TALK_T[p.pers].split('').filter(c=>c!==T.bad);const gain=[30,20,10][order.indexOf(choice)];
+ p.mor=clamp(p.mor+gain,0,100);p.low=0;note(`${p.nm}は部に残ることにした（士気＋${gain}）`,'up');
+ return {left:false,p,gain};
+}
+
+/* 新入部員・卒業・年度替わり */
+function joinNew(){
+ const sch=mySchool();const tier=tierOf(sch.kaku);
+ let n=4+Math.floor(sch.kaku/20)+ri(-2,2);
+ const P=ORIGIN_P[tier].slice();
+ for(const a of G.recruitActs){if(a==='show'){P[0]+=5;P[1]+=5;}if(a==='trial'){n+=1;P[3]+=5;}if(a==='poster')n+=2;}
+ P[0]+=G.visitBonus/2;P[1]+=G.visitBonus/2;
+ n=clamp(n,2,14);const taken=nameSet();const oki=PREFS[G.pref].name==='沖縄県';const list=[];
+ for(let i=0;i<n;i++){const p=genOwn(['club','chu','other','beg'][wpick(P)],1,G.sid,oki,taken);taken.add(p.nm);list.push(p);}
+ if(G.recruitActs.includes('scout')&&sch.kaku>=31&&R()<.5){const p=genOwn('club',1,G.sid,oki,taken);list.push(p);}
+ if(tier===4){for(let i=0;i<ri(1,2);i++){const p=genOwn('club',1,G.sid,oki,taken);p.pot=Math.max(p.pot,ri(75,143));finishCaps(p);list.push(p);}}
+ list.forEach(p=>p.rh.push({d:G.date.slice(0,7),r:ranksOf(p)}));
+ G.own.push(...list);G.recruitActs=[];G.recruitN=0;G.visitBonus=0;
+ note(`新入部員が${list.length}人入部した`,'up');G.newcomers=list.map(p=>p.id);
+}
+function finishCaps(p){for(const k of STATS)p.cap[k]=clamp(p.pot+ri(-15,15),Math.ceil(p.s[k])+5,300);}
+function graduate(){
+ const g3=G.own.filter(p=>p.g===3);
+ for(const p of g3){if(p.wins&&p.wins.length)G.obs.push({nm:p.nm,sc:G.sid,fy:G.fy,wins:p.wins,best:p.best,ih:!!p.ihExp});}
+ G.ihAlumni=(G.ihAlumni||0)+g3.filter(p=>p.ihExp).length;
+ G.own=G.own.filter(p=>p.g!==3);
+ for(const k in G.others){G.others[k]=G.others[k].filter(p=>{if(p.g===3&&p.wins&&p.wins.length)G.obs.push({nm:p.nm,sc:+k,fy:G.fy,wins:p.wins,best:p.best});return p.g!==3;});}
+ note(`卒業式。3年生${g3.length}人が卒業した`);
+}
+function newYear(){
+ const fy=G.fy+1;G.yearLog.push({fy:G.fy,kaku:mySchool().kaku});G.fy=fy;G.Y=buildYear(fy);
+ G.own.forEach(p=>{p.g++;p.ret=false;p.ksRep=false;p.gak=clamp(p.gak+ri(-5,5),1,100);});
+ for(const k in G.others){const sc=G.schools[k];G.others[k].forEach(p=>{p.g++;const inc=4.5+sc.kaku*.075;for(const s of STATS)p.s[s]=Math.min(p.pot,p.s[s]+inc+rf(-3,3));});}
+ for(const s of G.schools){if(s.own)continue;const b=SCHOOLS_BASE[s.id].kaku;addKaku(s,Math.round((b-s.kaku)*.25));if(R()<.2)addKaku(s,(R()<.5?-1:1)*ri(1,5));}
+ if(G.poolApplied&&G.fac!=='in'){G.fac='in';G.poolApplied=null;note('屋内温水プールが完成した。一年中プールで練習できる','up');}
+ const sch=mySchool();G.money=200000+sch.kaku*5000;G.qual={};G.campBooked=false;G.flags={};G.scouted={};G.ksSel=[];G.mtgDays=[];
+ let n=G.ihAlumni||0;for(let i=0;i<n;i++)if(R()<.1)addKaku(sch,2,'卒業生の活躍');
+ note(`${fy}年度が始まった。予算は${yen(G.money)}`);
+}
+/* ===== 大会 ===== */
+const TIMED_EV=['400IM','1500Fr','100IM'];
+const LANES=[4,5,3,6,2,7,1,8];
+function isTimed(def,ev){return def.timed||TIMED_EV.includes(baseEv(ev))||ev==='R800FR';}
+function bestOf(p,course,ev){return p.best&&p.best[course]&&p.best[course][ev];}
+function setBest(p,course,ev,t,MR){
+ p.best=p.best||{};p.best[course]=p.best[course]||{};const old=p.best[course][ev];
+ if(old==null||t<old){p.best[course][ev]=t;if(MR&&!p.other){MR.pb.add(p.id);if(old!=null)MR.log.push(`自己ベスト：${p.nm} ${evName(ev)} ${fmtT(t)}`);}
+  if(!p.other){G.records[course]=G.records[course]||{};const r=G.records[course][ev];if(!r||t<r.t)G.records[course][ev]={t,nm:p.nm,fy:G.fy,meet:MR?MR.def.ja:''};
+   const lim=tOf(ev,1,course);const key=ev+course;G.hs=G.hs||{};if(t<lim&&!G.hs[key]){G.hs[key]=1;addKaku(mySchool(),10,'高校記録の更新');}}
+  return true;}
+ return false;
+}
+function taperOf(sat){const from=addD(sat,-14);const n=G.mtgDays.filter(d=>d>=from&&d<sat).length;return n>=7?-.015:n>=4?-.01:n>=1?-.005:0;}
+function raceTime(p,ev,ctx){
+ const be=baseEv(ev);const [str]=EV[be];
+ let cond=[-.01,-.005,0,.007,.015][p.cond??2];if(ctx.talk==='calm')cond/=2;
+ let men=Math.min(p.s.men,150);
+ if(!p.other){if(p.pers==='負けず嫌い'&&ctx.g>=2)men+=22;if(p.pers==='繊細'&&ctx.g>=1)men-=15;
+  if(ctx.talk==='cheer')men+=(p.pers==='真面目'||p.pers==='繊細')?30:15;
+  if(ctx.talk==='trust'&&(p.pers==='負けず嫌い'||p.pers==='マイペース'))men+=22;}
+ const mental=ctx.g*(75-Math.min(men,150))/75*.004;
+ const sw=(ctx.swims||0)*.002;const tp=p.other?0:(ctx.taper||0);
+ const nz=gauss()*.004*((p.pers==='気分屋'&&ctx.talk==='calm')?.5:1);
+ const t=tOf(be,xOf(p,be,ctx.course),ctx.course)*(1+cond+mental+tp+sw+nz);
+ let dq=null;const st=.003+(ctx.g>=2?(150-Math.min(p.s.men,150))/150*.005:0);
+ if(!ctx.noStart&&R()<st)dq='フライング';
+ if(!dq&&(str==='br'||str==='fl'||str==='im')){const tv=str==='im'?Math.min(p.s.br,p.s.fl):p.s[str];const pr=tv<45?.03:tv<75?.01:.002;if(R()<pr)dq='泳法違反';}
+ return {t,dq};
+}
+function splitsFor(t,dist,L,end){
+ const n=Math.max(1,Math.round(dist/L));const f=.02+.04*(1-Math.min(end,150)/150);
+ const w=[];for(let k=0;k<n;k++)w.push(k===0?(n===1?1:.94):1+f*(n<=2?1:(k-1)/(n-2)));
+ const tot=w.reduce((a,b)=>a+b,0);let c=0;return w.map(x=>c+=t*x/tot);
+}
+
+/* 仮タイムの出場枠 */
+function vIndiv(sch,ev,nEv,course){
+ const mem=membersOf(sch);const e=Math.min(3,mem*2/nEv);let cnt=Math.floor(e)+(R()<e-Math.floor(e)?1:0);const out=[];
+ for(let k=0;k<cnt;k++){const s=sch.kaku+gauss()*12-5*k;const et=tOf(ev,xFromS(s),course);out.push({sid:sch.id,s,et});}
+ return out;
+}
+function vRelay(sch,rv,course){if(membersOf(sch)<8)return null;const s=sch.kaku+gauss()*8;return {sid:sch.id,s,et:relayVT(rv,xFromS(s),course)};}
+const vT=r=>r.et*(1+gauss()*.004);
+
+/* 他校の選手を決勝・自校の組のために用意（保存選手を優先） */
+function getOther(sid,ev,xT,course,used){
+ const list=G.others[sid]=G.others[sid]||[];
+ const c=list.find(p=>!used.has(p.id)&&(used.cnt[p.id]||0)<2&&Math.abs(xOf(p,ev,course)-xT)<=.03);
+ if(c){used.add(c.id);used.cnt[c.id]=(used.cnt[c.id]||0)+1;return c;}
+ const sch=G.schools[sid];const p=genOther(sid,sch.kaku,ev,xT,course,PREFS[sch.pref].name==='沖縄県',null);
+ list.push(p);used.add(p.id);used.cnt[p.id]=1;return p;
+}
+
+function eligibleOwn(def){return G.own.filter(p=>active(p)&&p.inj===0&&(!def.newbie||p.g<=2));}
+function autoEntries(def,players,course){
+ const evs=def.ev;const pairs=[];
+ for(const p of players)for(const ev of evs)pairs.push({p,ev,x:xOf(p,ev,course)});
+ pairs.sort((a,b)=>b.x-a.x);const per={},perEv={},out={};
+ for(const q of pairs){if((per[q.p.id]||0)>=2)continue;if(!def.rec&&(perEv[q.ev]||0)>=3)continue;
+  per[q.p.id]=(per[q.p.id]||0)+1;perEv[q.ev]=(perEv[q.ev]||0)+1;(out[q.ev]=out[q.ev]||[]).push(q.p.id);}
+ return out;
+}
+
+function startMeet(k){
+ const def=meetDef(k);const Y=G.Y.meets[k];const course=def.c;
+ const MR={k,def,course,sat:Y.sat,items:[],i:0,own:{},ownR:{},virt:{},vR:{},pre:{},fin:{},res:{},swims:{},pts:{},pb:new Set(),log:[],anims:[],used:new Set(),relGen:{},swum:{}};
+ MR.used.cnt={};
+ const grp=groupOf(G.pref);const block=PREFS[G.pref].block;
+ if(def.scope==='pref'){
+  const players=eligibleOwn(def);MR.own=autoEntries(def,players,course);
+  const others=schoolsIn(grp.prefs).filter(s=>!s.own);
+  for(const ev of def.ev){MR.virt[ev]=[];for(const s of others)MR.virt[ev].push(...vIndiv(s,ev,def.ev.length,course));}
+  for(const rv of def.rl){MR.vR[rv]=others.map(s=>vRelay(s,rv,course)).filter(Boolean);if(players.length>=4)MR.ownR[rv]=null;}
+ }else if(def.scope==='block'||def.scope==='nat'){
+  const Q=G.qual[k]||{own:[],ownR:[],v:{}};
+  for(const e of Q.own){const p=G.own.find(x=>x.id===e.pid);if(p&&active(p)&&p.inj===0)(MR.own[e.ev]=MR.own[e.ev]||[]).push(p.id);}
+  for(const ev of def.ev)MR.virt[ev]=(Q.v[ev]||[]).filter(r=>def.scope==='nat'||PREFS[G.schools[r.sid].pref].block===block).map(r=>({...r}));
+  for(const rv of def.rl){MR.vR[rv]=(Q.v[rv]||[]).filter(r=>def.scope==='nat'||PREFS[G.schools[r.sid].pref].block===block).map(r=>({...r}));if(Q.ownR.includes(rv))MR.ownR[rv]=null;}
+ }else if(def.scope==='jo'){
+  const players=G.own.filter(p=>active(p)&&p.inj===0);
+  for(const p of players){const ok=def.ev.filter(ev=>{const b=bestOf(p,course,ev);return b&&b<=joStd(ev,course);}).sort((a,b)=>xOf(p,b,course)-xOf(p,a,course)).slice(0,4);
+   for(const ev of ok)(MR.own[ev]=MR.own[ev]||[]).push(p.id);}
+  for(const ev of def.ev){const std=joStd(ev,course);MR.virt[ev]=[];
+   for(const s of G.schools){if(s.own||s.kaku<45)continue;for(const r of vIndiv(s,ev,def.ev.length,course))if(r.et<=std)MR.virt[ev].push(r);}}
+  const swimmers=new Set(Object.values(MR.own).flat());
+  for(const rv of def.rl){const std=joStd(rv,course);MR.vR[rv]=G.schools.filter(s=>!s.own&&s.kaku>=55).map(s=>vRelay(s,rv,course)).filter(r=>r&&r.et<=std);if(swimmers.size>=4)MR.ownR[rv]=null;}
+ }else if(def.scope==='ks'){
+  for(const e of G.ksSel){const p=G.own.find(x=>x.id===e.pid);if(p&&p.inj===0)(MR.own[e.ev]=MR.own[e.ev]||[]).push(p.id);}
+  const reps=PREFS.filter(P=>P.id!==G.pref).map(P=>{const ss=G.schools.filter(s=>s.pref===P.id).sort((a,b)=>b.kaku-a.kaku);return ss[0];});
+  for(const ev of def.ev){MR.virt[ev]=reps.map(s=>({sid:s.id,s:88+gauss()*8,et:0}));MR.virt[ev].forEach(r=>r.et=tOf(ev,xFromS(r.s),course));}
+ }
+ const has=new Set([...def.ev,...def.rl]);
+ const mk=(arr,day)=>{for(const it of arr){const [ev,ph]=it.split(':');
+  if(def.scope==='ks'){for(const c of ['A','B']){const k2=c+'|'+ev;if(has.has(k2))MR.items.push({ev:k2,ph:isTimed(def,ev)?'t':ph,day});}continue;}
+  if(!has.has(ev))continue;const tm=isTimed(def,ev);if(tm&&ph==='f')continue;MR.items.push({ev,ph:tm?'t':ph,day});}};
+ mk(ORDER1,1);mk(ORDER2,2);
+ MR.ownAny=Object.keys(MR.own).some(e=>MR.own[e].length)||Object.keys(MR.ownR).length>0;
+ for(const ev in MR.own)for(const pid of MR.own[ev])MR.swims[pid]={1:0,2:0};
+ return MR;
+}
+function itemOwn(MR,it){const ev=it.ev;if(ev[0]==='R')return it.ph==='f'?(MR.pre[ev]||[]).slice(0,8).some(r=>r.own):MR.ownR[ev]!==undefined&&MR.ownR[ev]!==false;
+ if(it.ph==='f')return (MR.fin8&&MR.fin8[ev]||[]).some(r=>r.own);return (MR.own[ev]||[]).length>0;}
+function needTalk(MR,it){return it.ph==='f'&&itemOwn(MR,it)&&MR.def.g>=1;}
+function ctxOf(MR,it,talk){return {g:MR.def.g,course:MR.course,talk,taper:taperOf(MR.sat)};}
+function ownRow(MR,p,ev,it,talk){const c=ctxOf(MR,it,talk);c.swims=MR.swims[p.id]?MR.swims[p.id][it.day]:0;const r=raceTime(p,ev,c);if(MR.swims[p.id])MR.swims[p.id][it.day]++;(MR.swum[p.id]=MR.swum[p.id]||[]).push(baseEv(ev));
+ return {sid:G.sid,pid:p.id,own:true,nm:p.nm,t:r.t,dq:r.dq,end:p.s.end,et:bestOf(p,MR.course,ev)||tOf(ev,xOf(p,ev,MR.course),MR.course)};}
+function sortRows(rows){rows.sort((a,b)=>(a.dq?1:0)-(b.dq?1:0)||a.t-b.t);rows.forEach((r,i)=>r.rk=r.dq?null:i+1);return rows;}
+function laneRows(rows8){return rows8.map((r,i)=>({...r,lane:LANES[i]}));}
+function genRow(MR,r,ev,it){
+ const xT=xFromT(ev,r.t||r.et,MR.course);const p=getOther(r.sid,ev,xT,MR.course,MR.used);
+ const c=ctxOf(MR,it,null);c.g=MR.def.g;const rr=raceTime(p,ev,c);
+ return {sid:r.sid,pid:p.id,gen:true,nm:p.nm,t:rr.t,dq:rr.dq,end:p.s.end};
+}
+function animOf(MR,ev,rows,title){
+ const L=MR.course==='LC'?50:25;
+ const lanes=rows.map(r=>{
+  if(ev[0]==='R'){let sp=[];let acc=0;const legs=RELAY[ev].legs;(r.legs||[]).forEach((lg,i)=>{const d=EV[legs[i]][1];const s=splitsFor(lg.t,d,L,lg.end);sp=sp.concat(s.map(v=>v+acc));acc+=lg.t;});
+   if(!sp.length)sp=splitsFor(r.t,EV[legs[0]][1]*4,L,100);return {lane:r.lane,nm:r.nm,sch:G.schools[r.sid].name,own:!!r.own,t:r.t,dq:r.dq,sp,legsNm:(r.legs||[]).map(l=>l.nm)};}
+  return {lane:r.lane,nm:r.nm,sch:G.schools[r.sid].name,own:!!r.own,t:r.t,dq:r.dq,sp:splitsFor(r.t,EV[baseEv(ev)][1],L,r.end||100)};});
+ return {title,ev,L,dist:ev[0]==='R'?EV[RELAY[ev].legs[0]][1]*4:EV[baseEv(ev)][1],lanes};
+}
+
+/* リレー：チームの泳ぎ */
+function relayRun(MR,rv,team,it,talk,isOwn){
+ const legs=RELAY[rv].legs;const res=[];let t=0,dq=null;
+ team.ps.forEach((p,i)=>{const c=ctxOf(MR,it,talk);c.noStart=i>0;if(isOwn&&MR.swims[p.id])c.swims=MR.swims[p.id][it.day];
+  const r=raceTime(p,legs[i],c);if(isOwn&&MR.swims[p.id])MR.swims[p.id][it.day]++;if(isOwn)(MR.swum[p.id]=MR.swum[p.id]||[]).push(legs[i]);
+  let lt=r.t;if(i>0){const pol=(team.pol&&team.pol[i])||'std';lt-=legTO(p)+(pol==='atk'?.2:pol==='safe'?-.2:0);if(R()<(pol==='atk'?.03:pol==='std'?.005:0))dq=dq||'引き継ぎ違反';}
+  if(r.dq&&!dq)dq=r.dq;t+=lt;res.push({nm:p.nm,t:lt,end:p.s.end,pid:p.id});});
+ return {t,dq,legs:res};
+}
+function genTeam(MR,r,rv){const legs=RELAY[rv].legs;const x=xFromS(r.s);if(MR.relGen[r.sid+rv])return MR.relGen[r.sid+rv];
+ const ps=legs.map(l=>getOther(r.sid,l,x,MR.course,MR.used));const tm={ps};MR.relGen[r.sid+rv]=tm;return tm;}
+function ownTeam(MR,rv){const L=MR.ownR[rv];if(!L)return null;return {ps:L.ids.map(id=>G.own.find(p=>p.id===id)),pol:L.pol};}
+
+/* 1項目を処理 */
+function runItem(MR,talk){
+ const it=MR.items[MR.i];if(!it)return null;const ev=it.ev;const out={it,title:evName(baseEv(ev))+(ev.includes('|')?`（少年${ev[0]}）`:'')+({p:' 予選',f:' 決勝',t:' タイム決勝'}[it.ph]),own:[],anim:null};
+ const def=MR.def;
+ if(ev[0]==='R'){
+  const own=MR.ownR[ev];
+  if(it.ph==='p'||it.ph==='t'){
+   let rows=(MR.vR[ev]||[]).map(r=>({sid:r.sid,s:r.s,et:r.et,t:vT(r)}));
+   let ownRowR=null;
+   if(own){const tm=ownTeam(MR,ev);const rr=relayRun(MR,ev,tm,it,talk,true);ownRowR={sid:G.sid,own:true,nm:mySchool().name,t:rr.t,dq:rr.dq,legs:rr.legs,et:rr.t};rows.push(ownRowR);}
+   if(ownRowR){
+    const byE=rows.slice().sort((a,b)=>b.et-a.et);const heats=[];for(let i=0;i<byE.length;i+=8)heats.push(byE.slice(i,i+8));
+    const h=heats.find(h=>h.includes(ownRowR));
+    for(const r of h){if(r.own)continue;const tm=genTeam(MR,r,ev);const rr=relayRun(MR,ev,tm,it,null,false);r.t=rr.t;r.dq=rr.dq;r.legs=rr.legs;r.nm=G.schools[r.sid].name;}
+    const hh=h.slice().sort((a,b)=>a.et-b.et);out.anim=animOf(MR,ev,laneRows(hh),out.title+'（自校の組）');
+   }
+   sortRows(rows);MR.pre[ev]=rows;
+   if(it.ph==='t'){MR.res[ev]=rows;scorePts(MR,rows,true);}
+   if(ownRowR)out.own.push({nm:mySchool().name,rk:ownRowR.rk,t:ownRowR.t,dq:ownRowR.dq,fin:it.ph==='p'&&ownRowR.rk&&ownRowR.rk<=8,legs:ownRowR.legs});
+  }else{
+   const fin=(MR.pre[ev]||[]).filter(r=>!r.dq).slice(0,8).map(r=>({...r,pt:r.t}));
+   const ownIn=fin.some(r=>r.own);
+   for(const r of fin){if(r.own){const rr=relayRun(MR,ev,ownTeam(MR,ev),it,talk,true);r.t=rr.t;r.dq=rr.dq;r.legs=rr.legs;}
+    else if(ownIn){const tm=genTeam(MR,r,ev);const rr=relayRun(MR,ev,tm,it,null,false);r.t=rr.t;r.dq=rr.dq;r.legs=rr.legs;r.nm=G.schools[r.sid].name;}
+    else{r.t=r.et*(1+gauss()*.004);r.dq=null;}}
+   const lanes=laneRows(fin);sortRows(fin);MR.res[ev]=fin;scorePts(MR,fin,true);
+   if(ownIn){out.anim=animOf(MR,ev,lanes,out.title);const o=fin.find(r=>r.own);out.own.push({nm:mySchool().name,rk:o.rk,t:o.t,dq:o.dq,legs:o.legs});}
+  }
+ }else{
+  const ownIds=MR.own[ev]||[];const ps=ownIds.map(id=>G.own.find(p=>p.id===id)).filter(Boolean);
+  if(it.ph==='p'||it.ph==='t'){
+   const rows=(MR.virt[ev]||[]).map(r=>({sid:r.sid,s:r.s,et:r.et,t:vT(r)}));
+   const mine=ps.map(p=>ownRow(MR,p,ev,it,talk));rows.push(...mine);
+   if(it.ph==='t'&&mine.length){
+    const byE=rows.slice().sort((a,b)=>b.et-a.et);const heats=[];for(let i=0;i<byE.length;i+=8)heats.push(byE.slice(i,i+8));
+    const hs=heats.filter(h=>h.some(r=>r.own));
+    hs.forEach((h,hi)=>{for(const r of h){if(r.own)continue;const g=genRow(MR,r,ev,it);Object.assign(r,g);}
+     if(hi===0){const hh=h.slice().sort((a,b)=>a.et-b.et);out.anim=animOf(MR,ev,laneRows(hh),out.title+'（自校の組）');}});
+   }
+   sortRows(rows);MR.pre[ev]=rows;
+   if(it.ph==='t'){MR.res[ev]=rows;scorePts(MR,rows,false);recordWins(MR,ev,rows);}
+   else{MR.fin8=MR.fin8||{};MR.fin8[ev]=rows.filter(r=>!r.dq).slice(0,8);}
+   for(const r of mine){const p=G.own.find(x=>x.id===r.pid);if(!r.dq)setBest(p,MR.course,baseEv(ev),r.t,MR);
+    const fin=it.ph==='p'&&r.rk&&r.rk<=8;if(it.ph==='p'&&!fin&&def.g>=1)p.mor=clamp(p.mor-5,0,100);
+    if(r.dq){p.mor=clamp(p.mor-15,0,100);if(def.g>=2)addKaku(mySchool(),-1,'大舞台での失格');}
+    out.own.push({nm:r.nm,pid:r.pid,rk:r.rk,n:rows.length,t:r.t,dq:r.dq,fin,pb:MR.pb.has(r.pid)});}
+  }else{
+   const fin=(MR.fin8&&MR.fin8[ev]||[]).map(r=>({...r,pt:r.t}));const ownIn=fin.some(r=>r.own);
+   const lanes=laneRows(fin);
+   for(const r of lanes){if(r.own){const p=G.own.find(x=>x.id===r.pid);const o=ownRow(MR,p,ev,it,talk);r.t=o.t;r.dq=o.dq;}
+    else if(ownIn){const g=genRow(MR,r,ev,it);Object.assign(r,g);}
+    else{r.t=r.et*(1+gauss()*.004);r.dq=null;}}
+   const res=lanes.slice();sortRows(res);MR.res[ev]=res;scorePts(MR,res,false);recordWins(MR,ev,res);
+   if(ownIn)out.anim=animOf(MR,ev,lanes,out.title);
+   for(const r of res.filter(r=>r.own)){const p=G.own.find(x=>x.id===r.pid);if(!r.dq)setBest(p,MR.course,baseEv(ev),r.t,MR);if(r.dq){p.mor=clamp(p.mor-15,0,100);if(def.g>=2)addKaku(mySchool(),-1,'大舞台での失格');}
+    out.own.push({nm:r.nm,pid:r.pid,rk:r.rk,t:r.t,dq:r.dq,pb:MR.pb.has(r.pid)});}
+  }
+ }
+ MR.i++;return out;
+}
+function scorePts(MR,rows,relay){rows.filter(r=>r.rk&&r.rk<=8).forEach(r=>{MR.pts[r.sid]=(MR.pts[r.sid]||0)+(9-r.rk)*(relay?2:1);});}
+function recordWins(MR,ev,rows){
+ const w=rows.find(r=>r.rk===1);if(!w||!w.pid)return;const main=['sotai','block','ih','kokuspo','jos','jow'].includes(MR.k);if(!main)return;
+ const p=w.own?G.own.find(x=>x.id===w.pid):(G.others[w.sid]||[]).find(x=>x.id===w.pid);if(!p)return;
+ p.wins=p.wins||[];p.wins.push({fy:G.fy,meet:MR.def.ja,ev:evName(baseEv(ev))});
+}
+function autoUntilOwn(MR){const outs=[];while(MR.i<MR.items.length&&!itemOwn(MR,MR.items[MR.i]))outs.push(runItem(MR,null));return outs;}
+function runAll(MR){while(MR.i<MR.items.length)runItem(MR,null);}
+
+/* 仮タイムだけの大会（自校が関わらない） */
+function vMeet(def,entries,rEntries,course){
+ const res={};
+ for(const ev of def.ev){const rows=(entries[ev]||[]).map(r=>({...r,t:vT(r)}));sortRows(rows);
+  if(!isTimed(def,ev)){const f=rows.slice(0,8).map(r=>({...r,pt:r.t,t:r.et*(1+gauss()*.004)}));sortRows(f);res[ev]={pre:rows,fin:f};}else res[ev]={pre:rows,fin:rows};}
+ for(const rv of def.rl){const rows=(rEntries[rv]||[]).map(r=>({...r,t:vT(r)}));sortRows(rows);
+  if(!isTimed(def,rv)){const f=rows.slice(0,8).map(r=>({...r,pt:r.t,t:r.et*(1+gauss()*.004)}));sortRows(f);res[rv]={pre:rows,fin:f};}else res[rv]={pre:rows,fin:rows};}
+ return res;
+}
+function vKaku(res,schools,def){
+ const cnt={},win={},pts={};
+ for(const ev in res){const rel=ev[0]==='R';for(const r of res[ev].fin.slice(0,8)){if(!r.rk)continue;cnt[r.sid]=(cnt[r.sid]||0)+1;if(r.rk===1)win[r.sid]=1;pts[r.sid]=(pts[r.sid]||0)+(9-r.rk)*(rel?2:1);}}
+ const order=Object.keys(pts).sort((a,b)=>pts[b]-pts[a]).map(Number);
+ for(const s of schools){if(s.own)continue;let d=0;if(cnt[s.id])d+=1;if(win[s.id])d+=2;
+  if(def.exp&&def.g===1){const t=tierOf(s.kaku);const c=cnt[s.id]||0;const tr=order.indexOf(s.id);
+   const ok=t===0?c>=1:t===1?c>=2:t===2?c>=3:t===3?tr>=0&&tr<3:tr===0;if(!ok)d-=t+1;}
+  addKaku(s,d);}
+}
+function qualFrom(res,std,course,pool){
+ for(const ev in res){const st=std[ev];if(st==null)continue;for(const r of res[ev].fin.slice(0,8)){if(!r.rk)continue;const bt=Math.min(r.t,r.pt||r.t);
+  if(bt<=st&&!r.own){(pool.v[ev]=pool.v[ev]||[]).push({sid:r.sid,s:r.s,et:r.et});}}}
+}
+const KAKU_CAP=6; /* 1大会で上がる格の上限（調整用） */
+/* ===== 大会の締め ===== */
+function finishMeet(MR){
+ const def=MR.def;const sch=mySchool();const sum={ja:def.ja,k:MR.k,lines:[],kaku0:sch.kaku};
+ // 学校対抗
+ const order=Object.keys(MR.pts).sort((a,b)=>MR.pts[b]-MR.pts[a]).map(Number);const tr=order.indexOf(G.sid);
+ sum.team=tr>=0?tr+1:null;sum.pts=MR.pts[G.sid]||0;sum.nTeams=order.length;
+ // 自校の成績
+ let top8=0,win=0,fins=0;const ownRes=[];
+ for(const ev in MR.res){for(const r of MR.res[ev]){if(!r.own)continue;ownRes.push({ev,nm:r.nm,rk:r.rk,t:r.t,dq:r.dq});
+  if(r.rk&&r.rk<=8){top8++;fins++;if(r.rk===1)win++;
+   if(def.g>=2&&r.pid){const p=G.own.find(x=>x.id===r.pid);if(p)p.top8g2=true;}}}}
+ // 格の上昇（自校）：1大会あたり＋10まで
+ let gain=0;const why=[];const nEnt=Object.values(MR.own).reduce((a,b)=>a+b.length,0)+Object.values(MR.ownR).filter(Boolean).length;
+ if(def.scope==='pref'&&def.g>=1){if(top8){gain+=top8;why.push(`入賞${top8}件`);}if(win){gain+=win*2;why.push(`優勝${win}件`);}if(MR.k==='sotai'&&tr===0){gain+=5;why.push('学校対抗優勝');}}
+ if(def.scope==='block'&&nEnt){gain+=2*nEnt;why.push(`出場${nEnt}件`);}
+ if((def.scope==='nat'||def.scope==='jo'||def.scope==='ks')&&nEnt){gain+=4*nEnt;why.push(`出場${nEnt}件`);
+  if(def.scope!=='jo'){if(top8){gain+=8*top8;why.push(`入賞${top8}件`);}if(MR.k==='ih'&&win){gain+=12*win;why.push('優勝');}}}
+ if(gain)addKaku(sch,Math.min(KAKU_CAP,gain),`${def.ja}：${why.join('・')}`);
+ if(def.g>=2&&top8&&R()<.3)addKaku(sch,2,'新聞・地元テレビの取材');
+ if(MR.k==='ih'){Object.values(MR.own).flat().forEach(id=>{const p=G.own.find(x=>x.id===id);if(p)p.ihExp=true;});for(const rv in MR.ownR)if(MR.ownR[rv])MR.ownR[rv].ids.forEach(id=>{const p=G.own.find(x=>x.id===id);if(p)p.ihExp=true;});}
+ // 大会の経験値（4本泳ぐと練習1か月分）
+ raceExp(MR,sum);
+ // 士気（自己ベスト・スランプ）
+ const entered=new Set([...Object.values(MR.own).flat()]);
+ for(const id of entered){const p=G.own.find(x=>x.id===id);if(!p)continue;
+  if(MR.pb.has(id)){p.mor=clamp(p.mor+10,0,100);p.slump=0;}else if(def.g>=1){p.slump=(p.slump||0)+1;if(p.slump>=3){p.mor=clamp(p.mor-8,0,100);p.slump=0;MR.log.push(p.nm+'がスランプに陥っている');}}}
+ // 他校の格（自分の県）
+ if(def.scope==='pref'){const res={};for(const ev in MR.res)res[ev]={fin:MR.res[ev]};vKaku(res,schoolsIn(groupOf(G.pref).prefs),def);}
+ // 求められる結果
+ if(def.exp)checkExpect(MR,sum,top8,tr);
+ // 上位大会への進出
+ if(MR.k==='sotai'||MR.k==='shinjin')qualifyPref(MR,MR.k==='sotai'?'block':'chihou',sum);
+ if(MR.k==='block')qualifyBlock(MR,sum);
+ if(MR.k==='sotai')selectKokuspo(MR,sum);
+ sum.kaku1=sch.kaku;sum.top8=top8;sum.win=win;sum.res=ownRes;sum.log=MR.log;
+ G.results.push({fy:G.fy,k:MR.k,ja:def.ja,date:MR.sat,team:sum.team,nTeams:sum.nTeams,pts:sum.pts,res:ownRes});
+ // 日付を月曜へ
+ G.pendingMeet=null;G.relaySel=null;
+ G.notices=[];G.todayLog.push({t:`${def.ja}が終わった`+(sum.team?`（学校対抗${sum.team}位）`:'')});
+ G.date=MR.sat;weekSummary();G.date=addD(MR.sat,1);endDay();
+ return sum;
+}
+function checkExpect(MR,sum,top8,tr){
+ const sch=mySchool();const t=tierOf(sch.kaku);let ok=true,txt='';
+ const blockN=(G.qual.block&&MR.k==='sotai')?G.qual.block.own.length+G.qual.block.ownR.length:0;
+ if(MR.k==='sotai'){[ok,txt]=t===0?[top8>=1,'決勝進出1件']:t===1?[top8>=2,'入賞2件']:t===2?[null,'ブロック大会進出3件']:t===3?[tr>=0&&tr<3,'学校対抗3位以内']:[tr===0,'学校対抗優勝'];}
+ if(MR.k==='ih'){if(t<3)return;const n=Object.values(MR.own).reduce((a,b)=>a+b.length,0)+Object.keys(MR.ownR).length;[ok,txt]=t===3?[n>=2,'出場2件']:[top8>=2,'入賞2件'];}
+ if(MR.k==='shinjin'){[ok,txt]=t===0?[top8>=1,'決勝進出1件']:t===1?[top8>=2,'入賞2件']:t===2?[top8>=5,'入賞5件']:t===3?[null,'地方新人大会進出3件']:[tr===0,'学校対抗優勝'];}
+ sum.expTxt=txt;sum.expPending=ok===null;sum.expOk=ok;
+ if(ok===false)addKaku(sch,-(t+1),`求められる結果（${txt}）に届かなかった`);
+}
+function qualifyPref(MR,target,sum){
+ const std=STD_BLOCK;const Q={own:[],ownR:[],v:{}};
+ for(const ev in MR.res){const st=std[baseEv(ev)]??std[ev];if(st==null)continue;const fin=MR.res[ev];
+  for(const r of fin.slice(0,8)){if(!r.rk)continue;const t=Math.min(r.t,r.pt??r.t);if(t>st)continue;
+   if(r.own){if(ev[0]==='R')Q.ownR.push(ev);else Q.own.push({pid:r.pid,ev});}
+   else (Q.v[ev]=Q.v[ev]||[]).push({sid:r.sid,s:r.s,et:r.et});}}
+ const def=MR.def;const mine=groupOf(G.pref).name;
+ for(const g of allGroups()){if(g.name===mine)continue;const ss=schoolsIn(g.prefs);const E={},RE={};
+  for(const ev of def.ev){E[ev]=[];for(const s of ss)E[ev].push(...vIndiv(s,ev,def.ev.length,def.c));}
+  for(const rv of def.rl)RE[rv]=ss.map(s=>vRelay(s,rv,def.c)).filter(Boolean);
+  const res=vMeet(def,E,RE,def.c);qualFrom(res,std,def.c,Q);vKaku(res,ss,def);}
+ G.qual[target]=Q;
+ const n=Q.own.length+Q.ownR.length;sum.qual=`${meetDef(target).ja}に${n}件進出`;
+ if(sum.expPending){const t=tierOf(mySchool().kaku);const ok=n>=3;sum.expOk=ok;if(!ok)addKaku(mySchool(),-(t+1),`求められる結果（${sum.expTxt}）に届かなかった`);}
+}
+function xToS(x){return (x*150-22)/0.9;}
+function qualifyBlock(MR,sum){
+ const Q={own:[],ownR:[],v:{}};const myB=PREFS[G.pref].block;
+ for(const ev in MR.pre){const st=STD_IH[baseEv(ev)]??STD_IH[ev];const all=[...(MR.pre[ev]||[]),...(MR.res[ev]||[])];
+  const seen=new Set();for(const r of all){if(r.dq||r.t>st)continue;const key=r.own?(r.pid||'R'):r.sid+':'+r.s;if(seen.has(key))continue;seen.add(key);
+   if(r.own){if(ev[0]==='R'){if(!Q.ownR.includes(ev))Q.ownR.push(ev);}else Q.own.push({pid:r.pid,ev});}
+   else (Q.v[ev]=Q.v[ev]||[]).push({sid:r.sid,s:r.s,et:r.et});}}
+ const def=MR.def;const src=G.qual.block||{v:{}};
+ for(const b of BLOCKS){if(b===myB)continue;const E={},RE={};
+  for(const ev of def.ev)E[ev]=(src.v[ev]||[]).filter(r=>PREFS[G.schools[r.sid].pref].block===b);
+  for(const rv of def.rl)RE[rv]=(src.v[rv]||[]).filter(r=>PREFS[G.schools[r.sid].pref].block===b);
+  const res=vMeet(def,E,RE,def.c);
+  for(const ev in res){const st=STD_IH[ev];for(const r of res[ev].pre.concat(res[ev].fin)){if(r.dq||r.t>st)continue;(Q.v[ev]=Q.v[ev]||[]).push({sid:r.sid,s:r.s,et:r.et});}}}
+ for(const ev in Q.v){const m=new Map();Q.v[ev].forEach(r=>m.set(r.sid+':'+r.s,r));Q.v[ev]=[...m.values()];}
+ G.qual.ih=Q;const n=Q.own.length+Q.ownR.length;sum.qual=`インターハイに${n}件進出`;
+}
+function selectKokuspo(MR,sum){
+ const sel=[];const per={};
+ for(const ev in MR.res){if(ev[0]==='R')continue;const w=MR.res[ev].find(r=>r.rk===1);if(!w||!w.own)continue;const p=G.own.find(x=>x.id===w.pid);if(!p)continue;
+  const cls=p.g===1?'B':'A';const list=cls==='A'?EV_KSA:EV_KSB;if(!list.includes(ev))continue;if((per[p.id]||0)>=2)continue;per[p.id]=(per[p.id]||0)+1;sel.push({pid:p.id,ev:cls+'|'+ev});p.ksRep=true;}
+ G.ksSel=sel;if(sel.length){sum.ks=`国スポ代表に${new Set(sel.map(s=>s.pid)).size}人が選ばれた`;if(new Set(sel.map(s=>s.pid)).size>=2&&!G.flags.kyoka){G.flags.kyoka=1;addKaku(mySchool(),5,'県の強化指定校に選ばれた');}}
+}
+/* 自校が出ない上位大会 */
+function autoMeet(k){
+ const def=meetDef(k);
+ if(k==='block'){const MR=startMeet(k);runAll(MR);qualifyBlock(MR,{});return `${def.ja}（自校は出場なし）`;}
+ return `${def.ja}（自校は出場なし）`;
+}
+function meetHasOwn(k){const def=meetDef(k);if(def.scope==='pref')return eligibleOwn(def).length>0;
+ if(def.scope==='block'||def.scope==='nat'){const Q=G.qual[k];return !!Q&&(Q.own.length+Q.ownR.length)>0;}
+ if(def.scope==='ks')return G.ksSel.length>0;
+ if(def.scope==='jo'){return G.own.some(p=>active(p)&&def.ev.some(ev=>{const b=bestOf(p,def.c,ev);return b&&b<=joStd(ev,def.c);}));}
+ return false;}
+
+/* リレー候補 */
+function relayScore(p,leg,course){const [str,dist]=EV[leg];let s=xOf(p,leg,course);if(p.fav===str)s+=.02;if(favDist(p)===dist)s+=.02;return s;}
+function relayCands(MR,rv,legIdx){const leg=RELAY[rv].legs[legIdx];let ps=G.own.filter(p=>active(p)&&p.inj===0&&(!MR.def.newbie||p.g<=2));
+ if(MR.def.scope==='jo'){const sw=new Set(Object.values(MR.own).flat());ps=ps.filter(p=>sw.has(p.id));}
+ return ps.map(p=>({p,sc:relayScore(p,leg,MR.course)})).sort((a,b)=>b.sc-a.sc);}
+function defaultLineups(MR){
+ const out={};const cnt={};
+ for(const rv of Object.keys(MR.ownR)){
+  const legs=RELAY[rv].legs;let ids;
+  if(rv==='R400MR'){ids=[];const usedL=new Set();for(let i=0;i<4;i++){const c=relayCands(MR,rv,i).find(c=>!usedL.has(c.p.id)&&(cnt[c.p.id]||0)<2);if(c){ids.push(c.p.id);usedL.add(c.p.id);}}}
+  else{const c=relayCands(MR,rv,0).filter(c=>(cnt[c.p.id]||0)<2).slice(0,4).map(c=>c.p);if(c.length===4){const first=c.slice().sort((a,b)=>b.s.st-a.s.st)[0];const rest=c.filter(p=>p!==first);const anchor=rest[0];ids=[first.id,...rest.slice(1).map(p=>p.id),anchor.id];}}
+  if(ids&&ids.length===4){ids.forEach(id=>cnt[id]=(cnt[id]||0)+1);out[rv]={ids,pol:['std','std','std','std']};}
+ }
+ return out;
+}
+function recommendedTop(MR,rv){if(rv==='R400MR')return [0,1,2,3].map(i=>{const c=relayCands(MR,rv,i)[0];return c&&c.p.id;}).filter(Boolean);return relayCands(MR,rv,0).slice(0,4).map(c=>c.p.id);}
+function confirmLineups(MR,L){
+ for(const rv in MR.ownR){MR.ownR[rv]=L[rv]||false;}
+ const sel=new Set();for(const rv in L)if(L[rv])L[rv].ids.forEach(id=>sel.add(id));
+ const hit=new Set();for(const rv in MR.ownR){for(const id of recommendedTop(MR,rv)){if(!sel.has(id)&&!hit.has(id)){hit.add(id);const p=G.own.find(x=>x.id===id);const d=p.pers==='負けず嫌い'?15:p.pers==='マイペース'?5:10;p.mor=clamp(p.mor-d,0,100);note(`${p.nm}はリレーに選ばれず落ち込んでいる（士気−${d}）`,'down');}}}
+ for(const rv in MR.ownR)if(MR.ownR[rv]){MR.ownR[rv].ids.forEach(id=>{if(!MR.swims[id])MR.swims[id]={1:0,2:0};});}
+}
+
+/* ===== 保存（IndexedDB） ===== */
+const DB={db:null,
+ open(){return new Promise((ok,ng)=>{if(this.db)return ok(this.db);if(typeof indexedDB==='undefined')return ng('no idb');const r=indexedDB.open('swim-coach',1);r.onupgradeneeded=()=>r.result.createObjectStore('save');r.onsuccess=()=>{this.db=r.result;ok(this.db);};r.onerror=()=>ng(r.error);});},
+ async put(k,v){const db=await this.open();return new Promise((ok,ng)=>{const t=db.transaction('save','readwrite');t.objectStore('save').put(v,k);t.oncomplete=()=>ok();t.onerror=()=>ng(t.error);});},
+ async get(k){const db=await this.open();return new Promise((ok,ng)=>{const t=db.transaction('save','readonly');const q=t.objectStore('save').get(k);q.onsuccess=()=>ok(q.result);q.onerror=()=>ng(q.error);});},
+ async del(k){const db=await this.open();return new Promise(ok=>{const t=db.transaction('save','readwrite');t.objectStore('save').delete(k);t.oncomplete=()=>ok();});}
+};
+function packSave(){const o={...G,uid:UID};delete o.MR;return JSON.stringify(o,(k,v)=>typeof v==='number'?Math.round(v*1000)/1000:v);}
+function unpackSave(str){const o=JSON.parse(str);if(!o||o.v!==1)throw new Error('対応していないセーブデータです');UID=o.uid||1;delete o.uid;G=o;if(!SCHOOLS_BASE)SCHOOLS_BASE=buildSchools();return G;}
+async function saveGame(){try{await DB.put('slot1',packSave());return true;}catch(e){try{localStorage.setItem('swim-slot1',packSave());return true;}catch(e2){return false;}}}
+async function loadGame(){let s=null;try{s=await DB.get('slot1');}catch(e){}if(!s){try{s=localStorage.getItem('swim-slot1');}catch(e){}}if(!s)return null;return unpackSave(s);}
+
+/* 大会前日のリレー選択と当日の開始 */
+function relayNeeded(k){if(!meetHasOwn(k))return false;const MR=startMeet(k);return Object.keys(MR.ownR).length>0;}
+function prepRelay(k){const MR=startMeet(k);return {MR,L:defaultLineups(MR)};}
+function openMeet(k){
+ const MR=startMeet(k);
+ if(G.relaySel&&G.relaySel.k===k){for(const rv in MR.ownR){MR.ownR[rv]=G.relaySel.L[rv]||false;if(MR.ownR[rv])MR.ownR[rv].ids.forEach(id=>{if(!MR.swims[id])MR.swims[id]={1:0,2:0};});}}
+ else{const L=defaultLineups(MR);for(const rv in MR.ownR){MR.ownR[rv]=L[rv]||false;if(MR.ownR[rv])MR.ownR[rv].ids.forEach(id=>{if(!MR.swims[id])MR.swims[id]={1:0,2:0};});}}
+ MR.ownAny=Object.keys(MR.own).some(e=>MR.own[e].length)||Object.values(MR.ownR).some(Boolean);
+ return MR;
+}
+function skipMeet(k){
+ const def=meetDef(k);const txt=autoMeet(k);const sat=G.Y.meets[k].sat;
+ G.pendingMeet=null;G.todayLog.push({t:txt});G.date=sat;weekSummary();G.date=addD(sat,1);endDay();
+}
+
+/* 大会の経験値：1本泳ぐごとに練習1か月分の4分の1。4本で1か月分 */
+const MONTH_DAYS=21;
+const MONTH_BASE={spd:.072,end:.08,pow:.064,men:.03,st:.028,tn:.048};
+const MONTH_STROKE={swum:.064,other:.03};
+function raceExp(MR,sum){
+ let ups=0;const lines=[];
+ for(const id in MR.swum){const p=G.own.find(x=>x.id===+id);if(!p)continue;const evs=MR.swum[id];if(!evs.length)continue;
+  const before=ranksOf(p);
+  const eff=GROW_RATE*trainNow().mult*(p.pers==='真面目'?1.1:1)*(.75+p.mor/200)*GROWTH[p.type][Math.min(p.g,3)-1];
+  for(const ev of evs){
+   const str=EV[ev][0];const sw=str==='im'?STROKES:[str];const g={};
+   for(const k in MONTH_BASE)g[k]=MONTH_BASE[k];
+   for(const s of STROKES)g[s]=sw.includes(s)?MONTH_STROKE.swum:MONTH_STROKE.other;
+   for(const k in g){if(p.s[k]>=p.cap[k])continue;let d=g[k]*MONTH_DAYS/4*eff;if(STROKES.includes(k))d*=APT_MUL[p.apt[k]];d*=Math.max(.05,1-Math.pow(p.s[k]/p.cap[k],2));p.s[k]=Math.min(p.cap[k],p.s[k]+d);}
+  }
+  const after=ranksOf(p);for(const k of STATS)if(after[k]!==before[k]){ups++;const t=`${p.nm}の${STAT_JA[k]}が${before[k]}から${after[k]}に上がった`;note(t,'rank');G.weekUps.push(t);lines.push(t);}
+ }
+ const n=Object.keys(MR.swum).length;const tot=Object.values(MR.swum).reduce((a,b)=>a+b.length,0);
+ sum.exp=n?`${n}人が計${tot}本泳ぎ、大会の経験で能力が伸びた`+(ups?`（ランクアップ${ups}件）`:''):'';sum.expUps=lines;
+}
+/* ===== 画面 ===== */
+const U={screen:'title',tab:'home',menu:null,duty:'rest',dutyArg:null,sheet:null,MR:null,feed:[],relay:null,setup:{step:1},sum:null,talkPick:null,sort:'grade'};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const rkH=r=>`<span class="rk ${r}">${r}</span>`;
+const SHORT={spd:'スピ',end:'持久',pow:'パワ',men:'メン',fr:'自由',ba:'背泳',br:'平泳',fl:'バタ',st:'スタ',tn:'ター'};
+const COND=['絶好調','好調','普通','不調','絶不調'];const CONDM=['◎','○','－','△','×'];
+function toast(t){const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2200);}
+async function persist(){await saveGame();}
+
+function render(){
+ const app=$('#app');
+ if(U.screen==='title'){app.innerHTML=titleV();$('#nav').innerHTML='';$('#cta').innerHTML='';$('#ov').innerHTML='';return;}
+ if(U.screen==='setup'){app.innerHTML=setupV();$('#nav').innerHTML='';$('#cta').innerHTML='';$('#ov').innerHTML='';return;}
+ app.innerHTML=boardV()+({home:homeV,members:membersV,meets:meetsV,school:schoolV,records:recordsV}[U.tab])();
+ $('#nav').innerHTML=navV();$('#cta').innerHTML=U.tab==='home'?ctaV():'';
+ $('#ov').innerHTML=overlayV();
+ if(U.anim)startAnim();
+}
+function navV(){const t=[['home','⌂','ホーム'],['members','☺','部員'],['meets','◷','大会'],['school','▦','学校'],['records','✎','記録']];
+ return `<div>${t.map(([k,i,l])=>`<button data-act="tab" data-v="${k}" class="${U.tab===k?'on':''}" aria-label="${l}"><span>${i}</span>${l}</button>`).join('')}</div>`;}
+function boardV(){const I=dayInfo(G.date);const s=mySchool();
+ return `<header class="board"><div class="date">${fmtDate(G.date)}</div><div class="row"><span class="kind k-${I.kind}">${I.kind}${I.mult!==1&&I.practice?` ×${I.mult}`:''}</span><span>${esc(s.name)}</span><span>格 ${rkH(kakuRank(s.kaku))} ${s.kaku}</span><span>予算 ${yen(G.money)}</span></div></header>`;}
+
+/* --- タイトル・はじめる --- */
+function titleV(){return `<div class="title"><div class="lanes" aria-hidden="true"></div><h1>プールサイドの<br>監督</h1><p>高校水泳部の監督になって、毎日の練習と大会の采配で部を育てる。</p><div class="lanes" aria-hidden="true"></div>
+ <div class="btns" style="flex-direction:column"><button class="btn pri" data-act="cont" ${U.hasSave?'':'disabled'} style="padding:14px">続きから</button><button class="btn" data-act="newgame" style="padding:14px">新しく始める</button><button class="btn" data-act="import" style="padding:12px">データを読み込む</button></div>
+ <p class="mut" style="margin-top:18px">セーブデータはこの端末のブラウザに保存されます。機種変更の前には「記録」タブから書き出してください。</p></div>`;}
+function setupV(){const S=U.setup;
+ if(S.step===1){return `<div style="padding-top:20px"><h1>都道府県を選ぶ</h1><p class="mut">学校数が多いほど県大会の競争は激しくなります。</p>${BLOCKS.map(b=>`<h3>${b}</h3><div class="btns">${PREFS.filter(p=>p.block===b).map(p=>`<button class="btn sm" data-act="spref" data-v="${p.id}">${p.name} <span class="mut">${p.n}校</span></button>`).join('')}</div>`).join('')}</div>`;}
+ if(S.step===2){const g=groupOf(S.pref);return `<div style="padding-top:20px"><button class="btn sm" data-act="sback">戻る</button><h1>${PREFS[S.pref].name}</h1>${g.prefs.length>1?`<p class="mut">県大会は「${g.name}」で行います。</p>`:''}<h2>学校の区分を選ぶ</h2><div class="cards">${TIER_START.map((t,i)=>`<button class="card" data-act="stier" data-v="${i}"><b>${TIERS[i]}</b> <span class="mut">格 ${rkH(kakuRank(t.kaku))} ${t.kaku}・部員${t.n}人</span><br><small>${['自校プールなし。市営プールを週3日まで','屋外25mプール','屋外25mプール','屋外25mプール。冬の外部プールは週3日まで','屋内温水プール。毎年推薦で有望な新入生'][i]}</small></button>`).join('')}</div></div>`;}
+ if(S.step===3){if(!SCHOOLS_BASE)SCHOOLS_BASE=buildSchools();let list=SCHOOLS_BASE.filter(s=>s.pref===S.pref&&s.tier0===S.tier);const all=!list.length;if(all)list=SCHOOLS_BASE.filter(s=>s.pref===S.pref);
+  return `<div style="padding-top:20px"><button class="btn sm" data-act="sback">戻る</button><h1>学校を選ぶ</h1><p class="mut">${all?'この区分の学校がないため、どの学校でも選べます。':''}選んだ学校の監督になります。</p><div class="cards">${list.map(s=>`<button class="card ${S.school===s.id?'on':''}" data-act="sschool" data-v="${s.id}"><b>${esc(s.name)}</b></button>`).join('')}</div>
+  ${S.school!=null?`<div class="panel"><label>学校名（変えてもよい）<br><input type="text" id="sname" value="${esc(S.name||SCHOOLS_BASE[S.school].name)}" maxlength="20"></label><div class="btns"><button class="btn pri" data-act="sstart">この学校で始める</button></div></div>`:''}</div>`;}
+}
+
+/* --- ホーム --- */
+function homeV(){
+ const I=dayInfo(G.date);let h='';
+ if(G.pendingMeet){const def=meetDef(G.pendingMeet);const own=meetHasOwn(G.pendingMeet);
+  h+=`<div class="panel hot"><h2 style="margin-top:0">今日は${def.ja}</h2><p>${own?'自校の選手が出場します。2日間の競技を順に進めます。':'自校の選手は出場しません。結果だけを確認して先へ進みます。'}</p></div>`;}
+ else if(I.practice){const pk=poolOK(G.date);const avail=k=>!MENUS[k].pool||pk.ok;if(!U.menu||!avail(U.menu))U.menu=avail(G.lastMenu||'end')?(G.lastMenu||'end'):'land';
+  h+=`<div class="panel"><h2 style="margin-top:0">今日の練習</h2><p class="mut" style="margin:0 0 4px">練習環境：${trainNow().ja}（伸び×${trainNow().mult.toFixed(2)}）</p>${(()=>{const w=poolWeek(G.date);return `<p class="poolw ${w.free?'free':w.left?'':'none'}">${w.txt}</p>`;})()}<p class="mut">${I.kind}${I.mult!==1?`の練習（伸び ×${I.mult}）`:''}${!pk.ok&&pk.why==='予算が足りない'?'。予算が足りないため、プールは使えない':''}</p>
+  <div class="menus">${Object.entries(MENUS).map(([k,m])=>`<button class="mbtn ${U.menu===k?'on':''}" data-act="menu" data-v="${k}" ${avail(k)?'':'disabled'}><span class="tag">${m.pool?'プール':'陸上'}${m.hi?'・高強度':''}</span><b>${m.ja}</b><small>${m.desc}${menuExtra(k)?`<br><span class="up">＋${menuExtra(k)}</span>`:''}</small></button>`).join('')}</div>
+  ${G.menuStreak.m===U.menu&&G.menuStreak.n>=3?`<p class="mut down">同じ練習が${G.menuStreak.n}日続いている。5日続くと士気が下がる。</p>`:''}</div>`;}
+ else if(!I.meet){const ks=Object.keys(DUTIES);if(!dutyOK(U.duty))U.duty='rest';
+  h+=`<div class="panel"><h2 style="margin-top:0">オフ日の監督業</h2><p class="mut">部員は休み。監督の仕事を1つ選ぶ。</p>${ks.map(k=>{const ok=dutyOK(k);return `<button class="choice" data-act="duty" data-v="${k}" ${ok?'':'disabled'} style="${U.duty===k?'border-color:var(--deep2)':''};${ok?'':'opacity:.45'}"><b>${U.duty===k?'● ':''}${DUTIES[k].ja}</b><span class="mut">${DUTIES[k].desc}</span></button>`;}).join('')}
+  ${U.duty==='scout'?`<label>偵察する学校 <select id="dscout">${schoolsIn(groupOf(G.pref).prefs).filter(s=>!s.own).sort((a,b)=>b.kaku-a.kaku).map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join('')}</select></label>`:''}
+  ${U.duty==='recruit'?`<label>勧誘のしかた <select id="drec">${Object.entries(RECRUIT).filter(([k])=>!G.recruitActs.includes(k)&&(k!=='scout'||mySchool().kaku>=31)).map(([k,v])=>`<option value="${k}">${v.ja}</option>`).join('')}</select></label>`:''}</div>`;}
+ // 予定
+ const nm=nextMeet();const ex=G.Y.exams.find(e=>e.end>=G.date);
+ h+=`<div class="panel"><h3 style="margin-top:0">これからの予定</h3><ul class="list">`;
+ if(!I.practice&&!G.pendingMeet){const w=poolWeek(G.date);h+=`<li><span class="poolw ${w.free?'free':w.left?'':'none'}">${w.txt}</span></li>`;}
+ if(nm){const days=Math.round((s2d(nm.sat)-s2d(G.date))/864e5);const def=meetDef(nm.k);h+=`<li>${def.ja}まで<b class="num"> ${days}日</b>（${fmtMD(nm.sat)}）${days<=14&&days>0?`<br><span class="mut">直前2週間の調整：${G.mtgDays.filter(d=>d>=addD(nm.sat,-14)&&d<nm.sat).length}日（ミーティング・調整を選んだ日）</span>`:''}</li>`;}
+ if(ex){const days=Math.round((s2d(ex.start)-s2d(G.date))/864e5);h+=`<li>${ex.ja}${days>0?`まで<b class="num"> ${days}日</b>`:'の最中'}（${fmtMD(ex.start)}〜${fmtMD(ex.end)}）</li>`;}
+ if(G.Y.camp>G.date&&G.date>=ymd(G.fy,12,1)&&!G.campBooked)h+=`<li>冬合宿（${fmtMD(G.Y.camp)}からの1週間・15万円。期間中は毎日プールで練習できる） <button class="btn sm" data-act="camp" ${G.money<150000?'disabled':''}>申し込む</button></li>`;
+ if(G.campBooked&&G.Y.camp>=G.date)h+=`<li>冬合宿を申し込み済み（${fmtMD(G.Y.camp)}から）</li>`;
+ h+=`</ul></div>`;
+ // 注意が必要な部員
+ const warn=G.own.filter(p=>active(p)&&(p.mor<=30||p.inj>0||p.hoshu>0));
+ if(warn.length)h+=`<div class="panel"><h3 style="margin-top:0">気にかけたい部員</h3><ul class="list">${warn.map(p=>`<li><button class="prow" data-act="player" data-v="${p.id}"><span class="grow"><span class="nm">${esc(p.nm)}</span> <span class="meta">${p.g}年</span></span>${p.inj>0?'<span class="pill warn">けが</span>':''}${p.hoshu>0?'<span class="pill warn">補習</span>':''}${p.mor<=30?`<span class="pill warn">士気 ${rank10(p.mor)}</span>`:''}</button></li>`).join('')}</ul></div>`;
+ // 週のまとめ
+ if(dow(G.date)===0&&G.week&&(G.week.ups.length||G.week.tops.length))h+=`<div class="panel"><h3 style="margin-top:0">今週のまとめ</h3>${G.week.ups.length?`<ul class="list notes">${G.week.ups.map(t=>`<li class="rank">${esc(t)}</li>`).join('')}</ul>`:'<p class="mut">ランクアップはなし。</p>'}${G.week.tops.length?`<p class="mut">よく伸びた能力：${G.week.tops.slice(0,8).map(t=>`${esc(t.nm.split(' ')[0])}（${t.k.join('・')}）`).join('、')}</p>`:''}</div>`;
+ // 昨日のできごと
+ if(G.notices&&G.notices.length)h+=`<div class="panel"><h3 style="margin-top:0">前日のできごと</h3><ul class="list notes">${G.notices.map(n=>`<li class="${n.type}">${esc(n.t)}</li>`).join('')}</ul></div>`;
+ return h;
+}
+function ctaV(){
+ if(G.talk)return '';
+ if(G.pendingMeet)return `<button data-act="meetgo">${meetHasOwn(G.pendingMeet)?'大会を始める':'結果を確認して先へ進む'}</button>`;
+ const I=dayInfo(G.date);return `<button data-act="adv">${I.practice?'練習して1日進める':'1日進める'}</button>`;
+}
+
+/* --- 部員 --- */
+function membersV(){
+ let ps=G.own.slice();const S=U.sort;
+ if(S==='grade')ps.sort((a,b)=>b.g-a.g);if(S==='mor')ps.sort((a,b)=>a.mor-b.mor);if(S==='stroke')ps.sort((a,b)=>STROKES.indexOf(a.fav)-STROKES.indexOf(b.fav));if(S==='power')ps.sort((a,b)=>xOf(b,favEvent(b),'LC')-xOf(a,favEvent(a),'LC'));
+ return `<h1>部員 <span class="mut">${G.own.filter(active).length}人</span></h1><div class="btns">${[['grade','学年順'],['power','得意種目の力順'],['stroke','得意泳法順'],['mor','士気の低い順']].map(([k,l])=>`<button class="btn sm ${U.sort===k?'pri':''}" data-act="sort" data-v="${k}">${l}</button>`).join('')}</div>
+ <div class="panel"><ul class="list">${ps.map(p=>`<li><button class="prow" data-act="player" data-v="${p.id}"><span class="grow"><span class="nm">${esc(p.nm)}</span> <span class="meta">${p.g}年・${p.pers}・${evName(favEvent(p))}</span><br><span class="meta">調子 ${CONDM[p.cond]} ${COND[p.cond]}　士気 </span>${rkH(rank10(p.mor))}<span class="mini">${['spd','end','pow','men','st','fr','ba','br','fl','tn'].map(k=>`<span>${SHORT[k]}<span class="rk s ${rank(p.s[k])}">${rank(p.s[k])}</span></span>`).join('')}</span></span>${p.ret?'<span class="pill">引退</span>':''}${p.inj?'<span class="pill warn">けが</span>':''}${p.ksRep?'<span class="pill">国スポ代表</span>':''}</button></li>`).join('')}</ul></div>`;
+}
+function playerSheet(p){
+ const fd=favDist(p);const mine=G.own.includes(p);
+ let h=`<h2 style="margin-top:0">${esc(p.nm)} <span class="mut">${p.g}年</span></h2><p class="mut">${mine?ORIGINS[p.org].ja+'・':''}性格：${p.pers}・得意泳法：${STROKE_JA[p.fav]}・得意距離：${fd}m・得意種目：${evName(favEvent(p))}</p>`;
+ if(mine)h+=`<p>調子 ${CONDM[p.cond]} ${COND[p.cond]}　士気 ${rkH(rank10(p.mor))}　学力 ${rkH(rank10(p.gak))}</p>`;
+ h+=`<h3>能力</h3><div class="stats">${STATS.map(k=>`<div><span>${STAT_JA[k]}</span><span>${rkH(rank(p.s[k]))}<span class="arw ${arrow(p,k)==='→'?'mut':'up'}">${mine?arrow(p,k):''}</span></span></div>`).join('')}</div>`;
+ h+=`<h3>泳法適性</h3><p>${STROKES.map(s=>`${STROKE_JA[s]} ${rkH(p.apt[s])}`).join('　')}</p>`;
+ const B=p.best||{};const evs=[...new Set([...Object.keys(B.LC||{}),...Object.keys(B.SC||{})])];
+ h+=`<h3>自己ベスト</h3>${evs.length?`<div class="scroll"><table><tr><th>種目</th><th>長水路</th><th>短水路</th></tr>${evs.map(e=>`<tr><td>${evName(e)}</td><td class="num">${fmtT(B.LC&&B.LC[e])}</td><td class="num">${fmtT(B.SC&&B.SC[e])}</td></tr>`).join('')}</table></div>`:'<p class="mut">まだ記録がない。</p>'}`;
+ if(mine){const rs=G.results.flatMap(r=>r.res.filter(x=>x.nm===p.nm).map(x=>({...x,ja:r.ja,fy:r.fy})));
+  if(rs.length)h+=`<h3>大会成績</h3><div class="scroll"><table><tr><th>大会</th><th>種目</th><th>順位</th><th>記録</th></tr>${rs.slice(-12).reverse().map(x=>`<tr><td>${x.fy} ${x.ja}</td><td>${evName(baseEv(x.ev))}</td><td>${x.dq?'失格':x.rk}</td><td class="num">${fmtT(x.t)}</td></tr>`).join('')}</table></div>`;
+  if(p.exams.length)h+=`<h3>定期試験</h3><div class="scroll"><table><tr><th>試験</th><th>5教科</th><th>合計</th></tr>${p.exams.slice(-5).reverse().map(e=>`<tr><td>${e.fy} ${e.ja}</td><td class="num">${e.sub.join(' / ')}</td><td class="num">${e.tot}</td></tr>`).join('')}</table></div>`;
+  if(p.rh.length>1){const rh=p.rh.slice(-6);h+=`<h3>能力の推移</h3><div class="scroll"><table><tr><th></th>${rh.map(r=>`<th>${+r.d.slice(5)}月</th>`).join('')}</tr>${STATS.map(k=>`<tr><td>${STAT_JA[k]}</td>${rh.map(r=>`<td>${r.r[k]}</td>`).join('')}</tr>`).join('')}</table></div>`;}}
+ return h;
+}
+
+/* --- 大会 --- */
+function meetsV(){
+ const Y=G.Y;const rows=MEETS.map(M=>({d:Y.meets[M.k].sat,t:M.ja,k:M.k,type:'meet'})).concat(Y.exams.map(e=>({d:e.start,t:e.ja,type:'exam'})));rows.sort((a,b)=>a.d<b.d?-1:1);
+ const nm=nextMeet();let h=`<h1>${G.fy}年度の予定</h1><div class="panel"><ul class="list">${rows.map(r=>{const done=r.d<G.date;const res=r.type==='meet'?G.results.find(x=>x.fy===G.fy&&x.k===r.k):null;
+  return `<li style="${done?'opacity:.6':''}"><b class="num">${fmtMD(r.d)}</b>　${r.t}${r.type==='meet'?` <span class="pill">${meetDef(r.k).c==='SC'?'短水路':'長水路'}</span>`:' <span class="pill">試験</span>'}${res?`<br><span class="mut">学校対抗 ${res.team?res.team+'位':'—'}・入賞 ${res.res.filter(x=>x.rk&&x.rk<=8).length}件</span>`:''}${nm&&nm.k===r.k?' <span class="pill warn">次の大会</span>':''}</li>`;}).join('')}</ul></div>`;
+ if(nm){const def=meetDef(nm.k);h+=`<h2>${def.ja}の見どころ</h2><div class="panel">`;
+  if(def.scope==='pref'){const E=autoEntries(def,eligibleOwn(def),def.c);const std=nm.k==='sotai'||nm.k==='shinjin'?STD_BLOCK:null;
+   h+=`<p class="mut">エントリーは自動。現時点の見込み：</p><div class="scroll"><table><tr><th>種目</th><th>選手</th><th>自己ベスト</th>${std?'<th>標準記録まで</th>':''}</tr>${Object.entries(E).flatMap(([ev,ids])=>ids.map(id=>{const p=G.own.find(x=>x.id===id);const b=bestOf(p,def.c,ev);return `<tr><td>${evName(ev)}</td><td>${esc(p.nm)}</td><td class="num">${fmtT(b)}</td>${std?`<td class="num">${b?(b<=std[ev]?'<span class="up">突破</span>':'あと'+(b-std[ev]).toFixed(2)+'秒'):'—'}</td>`:''}</tr>`;})).join('')}</table></div>`;}
+  else if(def.scope==='block'||def.scope==='nat'){const Q=G.qual[nm.k];h+=Q?`<p>進出：個人${Q.own.length}件・リレー${Q.ownR.length}件</p><ul class="list">${Q.own.map(e=>{const p=G.own.find(x=>x.id===e.pid);return p?`<li>${evName(e.ev)}　${esc(p.nm)}</li>`:'';}).join('')}${Q.ownR.map(r=>`<li>${evName(r)}</li>`).join('')}</ul>`:'<p class="mut">前の大会の結果で出場者が決まる。</p>';}
+  else if(def.scope==='jo'){h+=`<p class="mut">標準記録（総合値0.62相当）を突破した種目に、1人4種目まで出場できる。</p><div class="scroll"><table><tr><th>種目</th><th>標準記録</th></tr>${def.ev.map(e=>`<tr><td>${evName(e)}</td><td class="num">${fmtT(joStd(e,def.c))}</td></tr>`).join('')}</table></div>`;}
+  else if(def.scope==='ks'){h+=G.ksSel.length?`<ul class="list">${G.ksSel.map(s=>{const p=G.own.find(x=>x.id===s.pid);return p?`<li>少年${s.ev[0]} ${evName(baseEv(s.ev))}　${esc(p.nm)}</li>`:'';}).join('')}</ul>`:'<p class="mut">県高校総体で優勝した選手が代表になる。</p>';}
+  h+=`</div>`;}
+ h+=`<h2>進出に必要な標準記録</h2><div class="panel scroll"><table><tr><th>種目</th><th>ブロック</th><th>インターハイ</th></tr>${EV_HS.map(e=>`<tr><td>${evName(e)}</td><td class="num">${fmtT(STD_BLOCK[e])}</td><td class="num">${fmtT(STD_IH[e])}</td></tr>`).join('')}</table></div>`;
+ return h;
+}
+
+/* --- 学校 --- */
+function expTxt(t){return [['決勝進出1件','—','決勝進出1件'],['入賞2件','—','入賞2件'],['ブロック大会進出3件','—','入賞5件'],['学校対抗3位以内','出場2件','地方新人大会進出3件'],['学校対抗優勝','入賞2件','学校対抗優勝']][t];}
+function schoolV(){
+ const s=mySchool();const t=tierOf(s.kaku);const e=expTxt(t);const g=groupOf(G.pref);
+ const facJa={none:'自校プールなし（市営プール週3日まで・無料）',out:'屋外25mプール（9月末〜4月は外部施設 週2日・1回5000円）',out3:'屋外25mプール（閉鎖期は外部施設 週3日・1回5000円）',in:'屋内温水プール（通年）'}[G.fac];
+ let h=`<h1>${esc(s.name)}</h1><div class="panel"><p>${PREFS[G.pref].name}・${TIERS[t]}・格 ${rkH(kakuRank(s.kaku))} ${s.kaku}</p><p class="mut">${facJa}</p><p class="mut">予算 ${yen(G.money)}</p>
+ ${G.fac==='in'?'':G.poolApplied?`<p class="up">屋内プールを整備中（${G.poolApplied+1}年4月から使える）</p>`:canApplyPool()?`<div class="panel hot" style="margin:8px 0"><b>屋内プールの整備を申請できる</b><p class="mut">格がA以上の学校は、屋内温水プールを持てる。申請すると来年度の4月から一年中プールで練習できる。</p><button class="btn pri" data-act="pool">屋内プールを申請する</button></div>`:`<p class="mut">格がA（61）以上になると、屋内プールの整備を申請できる。</p>`}
+ <h3>練習環境（${TIERS[t]}）</h3><p>${trainNow().ja}</p><div class="scroll"><table><tr><th>区分</th><th>伸び</th><th>けが</th><th>練習の追加効果</th></tr>${TRAIN.map((x,i)=>`<tr style="${i===t?'font-weight:800':''}"><td>${TIERS[i]}</td><td>×${x.mult.toFixed(2)}</td><td>×${x.inj}</td><td>${Object.keys(x.ex).map(k=>MENUS[k].ja+'：'+Object.keys(x.ex[k]).map(s=>s==='oth'?'他の泳法':STAT_JA[s]).join('・')).join('<br>')||'—'}</td></tr>`).join('')}</table></div><p class="mut">伸びの倍率は大会の経験値にもかかる。区分は今の格で決まる。</p>
+ <h3>求められる結果（${TIERS[t]}）</h3><table><tr><td>県高校総体</td><td>${e[0]}</td></tr><tr><td>インターハイ</td><td>${e[1]}</td></tr><tr><td>県新人戦</td><td>${e[2]}</td></tr></table><p class="mut">届かないと格が${t+1}下がる。</p></div>`;
+ const list=schoolsIn(g.prefs).slice().sort((a,b)=>b.kaku-a.kaku);
+ h+=`<h2>${g.name}の学校</h2><div class="panel"><ul class="list">${list.map((x,i)=>`<li><button class="prow" data-act="school" data-v="${x.id}"><span class="num mut" style="width:26px">${i+1}</span><span class="grow"><span class="nm" style="${x.own?'color:var(--blue)':''}">${esc(x.name)}</span> <span class="meta">${PREFS[x.pref].name!==PREFS[G.pref].name?PREFS[x.pref].name+'・':''}${TIERS[tierOf(x.kaku)]}</span></span>${rkH(kakuRank(x.kaku))}</button></li>`).join('')}</ul></div>`;
+ return h;
+}
+function schoolSheet(x){
+ const ps=(G.others[x.id]||[]);const ob=G.obs.filter(o=>o.sc===x.id);
+ let h=`<h2 style="margin-top:0">${esc(x.name)}</h2><p>${PREFS[x.pref].name}・${TIERS[tierOf(x.kaku)]}・格 ${rkH(kakuRank(x.kaku))} ${x.kaku}</p>`;
+ h+=`<h3>大会で見た選手</h3>${ps.length?`<ul class="list">${ps.map(p=>`<li><button class="prow" data-act="oplayer" data-v="${x.id}:${p.id}"><span class="grow"><span class="nm">${esc(p.nm)}</span> <span class="meta">${p.g}年・${evName(favEvent(p))}</span></span>${rkH(rank(Math.max(p.s.spd,p.s.end)))}</button></li>`).join('')}</ul>`:'<p class="mut">まだ決勝や同じ組で泳いだ選手はいない。</p>'}`;
+ if(G.scouted[x.id]===G.fy)h+=`<p class="mut">偵察済み：選手をタップすると能力ランクを見られる。</p>`;
+ if(ob.length)h+=`<h3>OB</h3><ul class="list">${ob.map(o=>`<li>${esc(o.nm)} <span class="mut">${o.fy}年度卒・${o.wins.map(w=>w.meet+' '+w.ev+' 優勝').join('、')}</span></li>`).join('')}</ul>`;
+ return h;
+}
+
+/* --- 記録 --- */
+function recordsV(){
+ let h=`<h1>記録</h1><h2>自校記録</h2><div class="panel scroll">`;
+ for(const c of ['LC','SC']){const r=G.records[c]||{};const ks=Object.keys(r);if(!ks.length)continue;h+=`<h3>${c==='LC'?'長水路':'短水路'}</h3><table>${ks.sort((a,b)=>Object.keys(EV).indexOf(a)-Object.keys(EV).indexOf(b)).map(k=>`<tr><td>${evName(k)}</td><td class="num">${fmtT(r[k].t)}</td><td>${esc(r[k].nm)}</td><td class="mut">${r[k].fy}</td></tr>`).join('')}</table>`;}
+ if(!G.records.LC&&!G.records.SC)h+=`<p class="mut">大会に出ると記録が残る。</p>`;h+=`</div>`;
+ const ob=G.obs.filter(o=>o.sc===G.sid);h+=`<h2>OB名鑑</h2><div class="panel">${ob.length?`<ul class="list">${ob.map(o=>`<li><b>${esc(o.nm)}</b> <span class="mut">${o.fy}年度卒</span><br><span class="mut">${o.wins.map(w=>`${w.fy} ${w.meet} ${w.ev} 優勝`).join('、')}</span></li>`).join('')}</ul>`:'<p class="mut">主要大会やインターハイで優勝した選手が、卒業後もここに残る。</p>'}</div>`;
+ h+=`<h2>大会の歩み</h2><div class="panel scroll"><table><tr><th>年度</th><th>大会</th><th>学校対抗</th><th>入賞</th></tr>${G.results.slice().reverse().map(r=>`<tr><td>${r.fy}</td><td>${r.ja}</td><td>${r.team?r.team+'位':'—'}</td><td>${r.res.filter(x=>x.rk&&x.rk<=8).length}</td></tr>`).join('')}</table></div>`;
+ if(G.yearLog.length)h+=`<h2>年度ごとの格</h2><div class="panel"><p>${G.yearLog.map(y=>`${y.fy}年度末 ${rkH(kakuRank(y.kaku))} ${y.kaku}`).join('　')}</p></div>`;
+ h+=`<h2>データ</h2><div class="panel"><p class="mut">セーブは毎日自動で行われます。ファイルに書き出しておくと、別の端末にも移せます。</p><div class="btns"><button class="btn" data-act="export">書き出す</button><button class="btn" data-act="import">読み込む</button><button class="btn warn" data-act="reset">最初からやり直す</button></div></div>`;
+ return h;
+}
+
+/* --- 重ねて出す画面 --- */
+function overlayV(){
+ if(U.anim)return animV();
+ if(U.relay)return relayV();
+ if(U.MR)return meetV();
+ if(G&&G.talk)return talkV();
+ if(U.sum)return sumV();
+ if(U.sheet){let inner='';if(U.sheet.p){const p=G.own.find(x=>x.id===U.sheet.p);if(p)inner=playerSheet(p);}
+  if(U.sheet.op){const [sid,pid]=U.sheet.op;const p=(G.others[sid]||[]).find(x=>x.id===pid);if(p)inner=G.scouted[sid]===G.fy?playerSheet(p):`<h2 style="margin-top:0">${esc(p.nm)}</h2><p class="mut">${p.g}年・${evName(favEvent(p))}</p><p>能力ランクを見るには、オフ日の監督業で偵察する。</p>`;}
+  if(U.sheet.s!=null)inner=schoolSheet(G.schools[U.sheet.s]);
+  return `<div class="sheet" data-act="closebg"><div role="dialog" aria-modal="true">${inner}<div class="btns"><button class="btn" data-act="close">閉じる</button></div></div></div>`;}
+ return '';
+}
+function talkV(){const p=G.own.find(x=>x.id===G.talk.pid);if(!p){G.talk=null;return '';}
+ return `<div class="sheet"><div role="dialog" aria-modal="true"><h2 style="margin-top:0">退部の相談</h2><p><b>${esc(p.nm)}</b>（${p.g}年・性格：${p.pers}）が「部を辞めたい」と相談に来た。</p><p class="mut">性格によって効きやすい言葉はあるが、いつも同じとは限らない。</p>${TALK.map(t=>`<button class="choice" data-act="talk" data-v="${t.k}"><b>${t.ja}</b>${t.line}</button>`).join('')}</div></div>`;}
+function sumV(){const S=U.sum;return `<div class="sheet"><div role="dialog" aria-modal="true">${S.html}<div class="btns"><button class="btn pri" data-act="sumclose">ホームへ</button></div></div></div>`;}
+
+/* 大会画面 */
+function meetV(){
+ const MR=U.MR;const it=MR.items[MR.i];const done=MR.i>=MR.items.length;
+ let h=`<div class="full"><div><header class="board"><div class="date">${MR.def.ja}</div><div class="row"><span class="kind k-大会">${it?it.day+'日目':'競技終了'}</span><span>${MR.course==='LC'?'長水路':'短水路'}</span><span>${MR.i}/${MR.items.length}種目</span></div></header>`;
+ if(U.talkPick){h+=`<div class="panel hot"><h2 style="margin-top:0">決勝前の声かけ</h2><p>${esc(U.talkPick.title)}に自校の選手が残った。${U.talkPick.who?`<br><span class="mut">${esc(U.talkPick.who)}</span>`:''}</p>${[['cheer','励ます','真面目・繊細な選手によく効く'],['calm','冷静にさせる','調子の波を小さくする'],['trust','任せる','負けず嫌い・マイペースの選手に効く']].map(([k,l,d])=>`<button class="choice" data-act="talkgo" data-v="${k}"><b>${l}</b><span class="mut">${d}</span></button>`).join('')}</div>`;}
+ else h+=`<div class="btns">${done?`<button class="btn pri" data-act="meetend" style="flex:1;padding:12px">大会を終える</button>`:`<button class="btn pri" data-act="mnext" style="flex:1;padding:12px">${itemOwn(MR,it)?'自校の種目を進める':'次の種目へ'}</button><button class="btn" data-act="mskip">自校の出番まで飛ばす</button>`}</div>`;
+ if(U.feed.length)h+=`<h2>自校の結果</h2>${U.feed.slice().reverse().map(f=>`<div class="panel"><b>${esc(f.title)}</b><ul class="list">${f.own.map(o=>`<li>${esc(o.nm)}　${o.dq?`<span class="down">失格（${o.dq}）</span>`:`<b>${o.rk}位</b>${o.n?`<span class="mut">/${o.n}</span>`:''}　<span class="num">${fmtT(o.t)}</span>`}${o.fin?' <span class="pill">決勝へ</span>':''}${o.pb?' <span class="pill" style="border-color:var(--green);color:var(--green)">自己ベスト</span>':''}${o.legs?`<br><span class="mut">${o.legs.map(l=>esc(l.nm.split(' ')[0])+' '+fmtT(l.t)).join(' → ')}</span>`:''}</li>`).join('')}</ul>${f.anim?`<button class="btn sm" data-act="replay" data-v="${U.feed.indexOf(f)}">もう一度見る</button>`:''}</div>`).join('')}`;
+ h+=`<h2>競技順序</h2><div class="panel"><ul class="list prog">${MR.items.map((x,i)=>`<li class="${i<MR.i?'done':i===MR.i?'cur':''} ${mineTag(MR,x)}">${i===MR.items.findIndex(y=>y.day===2)?'<b>2日目 </b>':''}${evName(baseEv(x.ev))}${x.ev.includes('|')?`（少年${x.ev[0]}）`:''} ${({p:'予選',f:'決勝',t:'タイム決勝'})[x.ph]}</li>`).join('')}</ul></div></div></div>`;
+ return h;
+}
+function mineTag(MR,x){
+ const ev=x.ev;const entered=ev[0]==='R'?!!MR.ownR[ev]:(MR.own[ev]||[]).length>0;if(!entered)return '';
+ if(x.ph!=='f')return 'mine';
+ if(MR.pre[ev])return itemOwn(MR,x)?'mine':'';
+ return 'maybe';
+}
+function meetStep(talk){
+ const MR=U.MR;const out=runItem(MR,talk);U.talkPick=null;
+ if(out&&(out.own.length||out.anim)){U.feed.push(out);if(out.anim){U.anim={data:out.anim,speed:1,t:0,done:false};}}
+}
+
+/* リレー選択 */
+function relayV(){
+ const R=U.relay;const rvs=Object.keys(R.MR.ownR);const rv=R.tab||rvs[0];const L=R.L[rv]||{ids:[null,null,null,null],pol:['std','std','std','std']};R.L[rv]=L;
+ const cnt={};for(const k in R.L)(R.L[k]?R.L[k].ids:[]).forEach(id=>{if(id)cnt[id]=(cnt[id]||0)+1;});
+ const top=new Set(recommendedTop(R.MR,rv));
+ let h=`<div class="full"><div><header class="board"><div class="date">明日は${R.MR.def.ja}</div><div class="row"><span>リレーメンバーを決める</span></div></header><div class="btns">${rvs.map(k=>`<button class="btn sm ${k===rv?'pri':''}" data-act="rtab" data-v="${k}">${evName(k)}</button>`).join('')}</div>`;
+ h+=`<div class="panel"><p class="mut">候補は向いている順に並ぶ。★得意泳法 ◆得意距離。⚠は外すと士気が下がる部員。</p>`;
+ for(let i=0;i<4;i++){const leg=RELAY[rv].legs[i];const cands=relayCands(R.MR,rv,i);
+  h+=`<div class="slot"><span style="width:34px;line-height:1.2" class="mut">${i+1}泳<br>${{fr:"自",ba:"背",br:"平",fl:"バ"}[EV[leg][0]]}</span><select data-act="rsel" data-i="${i}" style="flex:1"><option value="">（出さない）</option>${cands.map(c=>{const p=c.p;const sel=L.ids[i]===p.id;return `<option value="${p.id}" ${sel?'selected':''}>${esc(p.nm)}（${p.g}年）${rank(c.sc*150)}${p.fav===EV[leg][0]?' ★':''}${favDist(p)===EV[leg][1]?' ◆':''}${(cnt[p.id]||0)&&!sel?` 他${cnt[p.id]}`:''}</option>`;}).join('')}</select>
+  ${i>0?`<span class="seg">${[['atk','攻'],['std','標'],['safe','安']].map(([k,l])=>`<button data-act="rpol" data-i="${i}" data-v="${k}" class="${L.pol[i]===k?'on':''}" aria-label="${{atk:'攻める',std:'標準',safe:'安全'}[k]}">${l}</button>`).join('')}</span>`:'<span style="width:84px"></span>'}</div>`;}
+ const miss=[...top].filter(id=>!rvs.some(k=>R.L[k]&&R.L[k].ids.includes(id))).map(id=>G.own.find(p=>p.id===id));
+ h+=`${miss.length?`<p class="down">⚠ ${miss.map(p=>esc(p.nm)).join('、')}を外すと士気が下がる</p>`:''}<p class="mut">引き継ぎ：攻める（−0.2秒・失格3%）／標準（失格0.5%）／安全（＋0.2秒・失格なし）。1人が出られるリレーは2種目まで。</p></div>
+ <div class="btns"><button class="btn pri" data-act="rok" style="flex:1;padding:12px">このメンバーで決める</button></div></div></div>`;
+ return h;
+}
+
+/* レースのアニメーション */
+function animV(){const A=U.anim.data;
+ return `<div class="full"><div><header class="board"><div class="date" style="font-size:19px">${esc(A.title)}</div><div class="row"><span>${A.L}mプール</span><span id="adist" class="num" style="color:var(--boardtxt);font-weight:800;font-size:16px"></span><span id="aclock" class="num">0.00</span></div></header>
+ <div class="pool"><canvas id="cv" height="300" aria-label="レースの様子"></canvas></div>
+ <div class="btns">${[[1,'1倍'],[4,'4倍']].map(([v,l])=>`<button class="btn sm ${U.anim.speed===v?'pri':''}" data-act="aspd" data-v="${v}">${l}</button>`).join('')}<button class="btn sm" data-act="askip">結果まで飛ばす</button><button class="btn sm pri" data-act="aclose" id="aclose" style="margin-left:auto;${U.anim.done?'':'display:none'}">次へ</button></div>
+ <div class="panel scroll"><table class="lb" id="lb"></table></div></div></div>`;}
+let RAF=null;
+function startAnim(){
+ const A=U.anim.data;const cv=$('#cv');if(!cv)return;const ctx=cv.getContext('2d');
+ const W=cv.clientWidth;cv.width=W*devicePixelRatio;cv.height=300*devicePixelRatio;ctx.scale(devicePixelRatio,devicePixelRatio);
+ const H=300,lh=H/8;const maxT=Math.max(...A.lanes.filter(l=>!l.dq).map(l=>l.t),...A.lanes.map(l=>l.t));
+ const legsN=A.ev[0]==='R'?4:1;const segPerLeg=A.lanes[0]?A.lanes[0].sp.length/legsN:1;
+ const pos=(ln,t)=>{const sp=ln.sp;let k=0;while(k<sp.length&&sp[k]<=t)k++;if(k>=sp.length)return {x:(sp.length%2===1)?1:0,fin:true,seg:sp.length-1,d:sp.length*A.L};
+  const a=k?sp[k-1]:0;const f=Math.max(0,(t-a)/(sp[k]-a));return {x:k%2===0?f:1-f,fin:false,seg:k,d:(k+f)*A.L};};
+ const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ let last=performance.now();if(reduce)U.anim.t=maxT+1;
+ const draw=()=>{
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#0e6f8a';ctx.fillRect(0,0,W,H);
+  for(let i=0;i<=8;i++){ctx.fillStyle=i%2?'#f4b400':'#d64545';ctx.fillRect(0,i*lh-1,W,2);}
+  ctx.fillStyle='rgba(255,255,255,.25)';ctx.fillRect(W*.5-1,0,2,H);
+  const tt=U.anim.t;const fins=[];
+  A.lanes.forEach(ln=>{const y=(ln.lane-1)*lh+lh/2;const P=pos(ln,tt);const x=18+P.x*(W-36);
+   ctx.fillStyle='rgba(255,255,255,.75)';ctx.font='11px sans-serif';ctx.fillText(String(ln.lane),4,y+4);
+   ctx.beginPath();ctx.arc(x,y,ln.own?8:6,0,Math.PI*2);ctx.fillStyle=ln.own?'#F4B400':'#ffffff';ctx.fill();if(ln.own){ctx.strokeStyle='#20180a';ctx.lineWidth=2;ctx.stroke();}
+   if(P.fin&&!ln.dq)fins.push(ln);});
+  const cl=$('#aclock');if(cl)cl.textContent=fmtT(Math.min(tt,maxT));const lead=Math.max(...A.lanes.map(l=>pos(l,tt).d));const dl=$('#adist');if(dl)dl.textContent=`先頭 ${Math.min(A.dist,Math.floor(lead))}m／${A.dist}m`;
+  const sorted=A.lanes.slice().sort((a,b)=>{const pa=pos(a,tt),pb=pos(b,tt);if(pa.fin&&pb.fin)return (a.dq?1:0)-(b.dq?1:0)||a.t-b.t;if(pa.fin)return -1;if(pb.fin)return 1;const da=pa.seg+(pa.seg%2===0?pa.x:1-pa.x),db=pb.seg+(pb.seg%2===0?pb.x:1-pb.x);return db-da;});
+  const lb=$('#lb');if(lb)lb.innerHTML=`<tr><th></th><th>コース</th><th>選手</th><th>距離・記録</th></tr>`+sorted.map((ln,i)=>{const P=pos(ln,tt);const fin=P.fin;let nm=ln.nm;if(legsN>1&&ln.legsNm&&ln.legsNm.length){const li=Math.min(3,Math.floor(Math.min(P.seg,ln.sp.length-1)/segPerLeg));nm=`${ln.nm}<br><span class="mut">${esc(ln.legsNm[li]||'')}</span>`;}else nm=`${esc(ln.nm)}<br><span class="mut">${esc(ln.sch)}</span>`;
+   return `<tr class="${ln.own?'own':''}"><td>${fin?(ln.dq?'失格':1+A.lanes.filter(o=>!o.dq&&o.t<ln.t).length):''}</td><td>${ln.lane}</td><td>${nm}</td><td class="num">${fin?(ln.dq?'—':fmtT(ln.t)):`<span class="mut">${Math.floor(P.d)}m</span>`}</td></tr>`;}).join('');
+  if(tt>=maxT){U.anim.done=true;const b=$('#aclose');if(b)b.style.display='';return;}
+  const now=performance.now();const dt=(now-last)/1000;last=now;U.anim.t+=dt*5*U.anim.speed;RAF=requestAnimationFrame(draw);};
+ cancelAnimationFrame(RAF);draw();
+}
+
+/* ===== 操作 ===== */
+document.addEventListener('click',async e=>{
+ const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act,v=b.dataset.v;
+ if(b.tagName==='SELECT'||b.tagName==='OPTION')return;
+ if(a==='closebg'&&e.target!==b)return;
+ switch(a){
+  case 'tab':U.tab=v;window.scrollTo(0,0);break;
+  case 'newgame':U.screen='setup';U.setup={step:1};break;
+  case 'cont':{try{await loadGame();U.screen='game';U.tab='home';}catch(err){toast(err.message);}break;}
+  case 'import':importFile();return;
+  case 'spref':U.setup={step:2,pref:+v};break;
+  case 'stier':U.setup.tier=+v;U.setup.step=3;U.setup.school=null;break;
+  case 'sschool':U.setup.school=+v;U.setup.name=null;break;
+  case 'sback':U.setup.step--;break;
+  case 'sstart':{const nm=($('#sname').value||'').trim();newGame(U.setup.pref,U.setup.tier,U.setup.school,nm||null);U.screen='game';U.tab='home';U.menu=null;await persist();break;}
+  case 'menu':U.menu=v;break;
+  case 'duty':U.duty=v;break;
+  case 'pool':if(applyPool()){toast('屋内プールの整備を申請した');await persist();}break;
+  case 'camp':G.campBooked=true;G.money-=150000;toast('冬合宿を申し込んだ');await persist();break;
+  case 'adv':await advance();return;
+  case 'meetgo':{const k=G.pendingMeet;if(!meetHasOwn(k)){skipMeet(k);await persist();toast(meetDef(k).ja+'：自校は出場なし');break;}U.MR=openMeet(k);U.feed=[];break;}
+  case 'mnext':{const MR=U.MR;const it=MR.items[MR.i];if(needTalk(MR,it)){const own=it.ev[0]==='R'?[]:(MR.fin8[it.ev]||[]).filter(r=>r.own).map(r=>G.own.find(p=>p.id===r.pid)).filter(Boolean);U.talkPick={title:evName(baseEv(it.ev))+' 決勝',who:own.map(p=>`${p.nm}（${p.pers}）`).join('、')};break;}meetStep(null);break;}
+  case 'talkgo':meetStep(v);break;
+  case 'mskip':{autoUntilOwn(U.MR);break;}
+  case 'meetend':{const MR=U.MR;const S=finishMeet(MR);U.MR=null;U.sum={html:sumHtml(S)};await persist();break;}
+  case 'sumclose':U.sum=null;break;
+  case 'replay':{const f=U.feed[+v];U.anim={data:f.anim,speed:1,t:0,done:false};break;}
+  case 'aspd':U.anim.speed=+v;document.querySelectorAll('[data-act=aspd]').forEach(x=>x.classList.toggle('pri',x.dataset.v===v));return;
+  case 'askip':U.anim.t=1e9;return;
+  case 'aclose':cancelAnimationFrame(RAF);U.anim=null;break;
+  case 'player':U.sheet={p:+v};break;
+  case 'oplayer':{const [s,p]=v.split(':').map(Number);U.sheet={op:[s,p]};break;}
+  case 'school':U.sheet={s:+v};break;
+  case 'close':U.sheet=null;break;
+  case 'closebg':U.sheet=null;break;
+  case 'sort':U.sort=v;break;
+  case 'talk':{const r=resolveTalk(v);G.notices=G.todayLog.slice();await persist();toast(r&&r.left?`${r.p.nm}は退部した`:`${r.p.nm}は残ってくれた（士気＋${r.gain}）`);break;}
+  case 'rtab':U.relay.tab=v;break;
+  case 'rpol':{const R=U.relay;const rv=R.tab||Object.keys(R.MR.ownR)[0];R.L[rv].pol[+b.dataset.i]=v;break;}
+  case 'rok':{if(!(await relayOK()))return;break;}
+  case 'export':exportFile();return;
+  case 'reset':if(confirm('今のデータを消して最初からやり直しますか？')){await DB.del('slot1').catch(()=>{});try{localStorage.removeItem('swim-slot1');}catch(e){}G=null;U.hasSave=false;U.screen='title';}break;
+ }
+ render();
+});
+document.addEventListener('change',e=>{const t=e.target;if(t.dataset.act==='rsel'){const R=U.relay;const rv=R.tab||Object.keys(R.MR.ownR)[0];R.L[rv].ids[+t.dataset.i]=t.value?+t.value:null;render();}});
+
+async function advance(){
+ if(G.talk){render();return;}
+ const I=dayInfo(G.date);
+ if(I.practice){const err=practice(U.menu||'end');if(err){toast(err);return;}}
+ else if(!I.meet){let arg;if(U.duty==='scout'){const s=$('#dscout');arg=s?+s.value:null;if(arg==null){U.duty='rest';}}if(U.duty==='recruit'){const s=$('#drec');arg=s?s.value:null;if(!arg)U.duty='rest';}duty(U.duty,arg);U.duty='rest';}
+ const tm=addD(G.date,1);const mk=Object.keys(G.Y.meets).find(k=>G.Y.meets[k].sat===tm);
+ if(mk&&relayNeeded(mk)){const P=prepRelay(mk);U.relay={MR:P.MR,L:P.L,k:mk};render();return;}
+ endDay();await persist();window.scrollTo(0,0);render();
+}
+async function relayOK(){
+ const R=U.relay;const L={};const cnt={};
+ for(const rv in R.MR.ownR){const x=R.L[rv];if(!x){L[rv]=false;continue;}const ids=x.ids.filter(Boolean);
+  if(ids.length===0){L[rv]=false;continue;}
+  if(ids.length<4){toast(evName(rv)+'は4人そろえるか、全員外す');return false;}
+  if(new Set(ids).size<4){toast(evName(rv)+'に同じ選手が2回入っている');return false;}
+  ids.forEach(id=>cnt[id]=(cnt[id]||0)+1);L[rv]={ids:x.ids.slice(),pol:x.pol.slice()};}
+ if(Object.values(cnt).some(n=>n>2)){toast('1人が出られるリレーは2種目まで');return false;}
+ confirmLineups(R.MR,L);G.relaySel={k:R.k,L};U.relay=null;endDay();await persist();window.scrollTo(0,0);return true;
+}
+function sumHtml(S){
+ return `<h2 style="margin-top:0">${S.ja} 終了</h2>${S.team?`<p>学校対抗 <b>${S.team}位</b>（${S.pts}点）</p>`:''}<p>入賞 ${S.top8}件・優勝 ${S.win}件</p>
+ ${S.qual?`<p><b>${S.qual}</b></p>`:''}${S.ks?`<p><b>${S.ks}</b></p>`:''}${S.expTxt?`<p>求められる結果（${S.expTxt}）：${S.expOk?'<span class="up">達成</span>':'<span class="down">未達</span>'}</p>`:''}
+ <p>格 ${S.kaku0} → <b>${S.kaku1}</b></p>${S.exp?`<p>${S.exp}</p>`:''}${S.expUps&&S.expUps.length?`<ul class="list notes">${S.expUps.map(t=>`<li class="rank">${esc(t)}</li>`).join('')}</ul>`:''}${(S.log||[]).length?`<ul class="list notes">${S.log.map(t=>`<li>${esc(t)}</li>`).join('')}</ul>`:''}
+ ${S.res.length?`<div class="scroll"><table><tr><th>種目</th><th>選手</th><th>順位</th><th>記録</th></tr>${S.res.filter(r=>r.rk||r.dq).map(r=>`<tr><td>${evName(baseEv(r.ev))}</td><td>${esc(r.nm)}</td><td>${r.dq?'失格':r.rk}</td><td class="num">${fmtT(r.t)}</td></tr>`).join('')}</table></div>`:''}`;
+}
+function exportFile(){const blob=new Blob([packSave()],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`swim-coach-${G.date}.json`;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);}
+function importFile(){const i=document.createElement('input');i.type='file';i.accept='application/json,.json';i.onchange=async()=>{const f=i.files[0];if(!f)return;try{unpackSave(await f.text());await persist();U.screen='game';U.tab='home';toast('読み込んだ');render();}catch(err){toast('読み込めないファイルです');}};i.click();}
+
+(async function boot(){
+ SCHOOLS_BASE=null;
+ try{const s=await DB.get('slot1');U.hasSave=!!s;}catch(e){try{U.hasSave=!!localStorage.getItem('swim-slot1');}catch(e2){}}
+ render();
+})();
+</script>
+</body>
+</html>
